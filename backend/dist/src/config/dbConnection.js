@@ -10,6 +10,7 @@ const sql = (0, postgres_1.default)({
     database: process.env.DATABASE_NAME, // Name of database to connect to
     username: process.env.USERNAME, // Username of database user
     password: process.env.PASSWORD,
+    ssl: { rejectUnauthorized: false }
 }); // will use psql environment variables
 exports.default = sql;
 //# sourceMappingURL=dbConnection.js.map
