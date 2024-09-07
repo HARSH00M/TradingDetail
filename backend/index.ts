@@ -21,7 +21,6 @@ app.get("/", (request: Request, response: Response) => {
   response.status(200).send("Hello World");
 }); 
 
-app.use("/tables", router);
 app.get('/inserttotable', async (req, res) => {
   async function InsertColumn() {
    
@@ -120,6 +119,9 @@ app.get('/insertdataintotable', (req, res) => {
   }
   
 })
+
+app.use("/tables", router);
+
 app.use(AuthRouter);
 app.use(SearchRouter)
 
