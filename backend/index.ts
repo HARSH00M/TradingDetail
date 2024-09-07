@@ -22,19 +22,10 @@ app.get("/", (request: Request, response: Response) => {
 }); 
 
 app.use("/tables", router);
-app.get('/inserttotable', (req, res) => {
+app.get('/inserttotable', async (req, res) => {
   async function InsertColumn() {
-    // values[0],
-    // values[1],
-    // values[3],
-    // values[4],
-    // values[5],
-    // values[6],
-    // values[12],
-    // values[13],
-    // values[14])
+   
     try {
-        // await sql`drop table Transactions`;
         const result = await sql`create table Transactions(
         symbol VARCHAR(255) ,
         company VARCHAR(255) ,
@@ -57,9 +48,7 @@ app.get('/inserttotable', (req, res) => {
         id SERIAL PRIMARY KEY,
     )`;
         // const result = JSON.parse(response);
-        result.forEach(element => {
-            console.log(element);
-        });
+        
     } catch (error) {
         console.error('Connection error:', error);
     } finally {
@@ -67,9 +56,13 @@ app.get('/inserttotable', (req, res) => {
     }
 
 }
-InsertColumn();
+
+try{
+  await InsertColumn();
   res.send('Done')
-})
+} catch (error) {
+  res.send('Not Done')
+}})
 
 app.get('/insertdataintotable', (req, res) => {
   function InsertDataToArray() {
@@ -110,7 +103,7 @@ app.get('/insertdataintotable', (req, res) => {
                 
             });
 
-            InsertDataToArray()
+            
 
             res.send('Done')
         // console.log(result)
@@ -118,6 +111,14 @@ app.get('/insertdataintotable', (req, res) => {
         console.error('Connection error:', error);
     } 
 }
+  try{
+    InsertDataToArray();
+    res.json('Done')
+  } catch (error) {
+    console.error('Connection error:', error);
+    res.json('Not-Done')
+  }
+  
 })
 app.use(AuthRouter);
 app.use(SearchRouter)
