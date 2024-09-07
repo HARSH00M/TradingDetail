@@ -8,7 +8,7 @@ const sql = require('postgres')({
     host: process.env.HOST,
     port: 5432,
     database: process.env.DATABASE_NAME,
-    username: process.env.USERNAME,
+    username: 'user007',
     password: process.env.PASSWORD,
     ssl: { rejectUnauthorized: false },
     idle_timeout: 10,  // Close idle connections after 10 seconds

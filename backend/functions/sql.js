@@ -70,7 +70,7 @@ async function InsertColumn() {
         mode_of_acquisition VARCHAR(255),
         exchange VARCHAR(255),
         broadcast_date_time VARCHAR(255),
-        id SERIAL PRIMARY KEY,
+        id SERIAL PRIMARY KEY
     )`;
         // const result = JSON.parse(response);
         result.forEach(element => {

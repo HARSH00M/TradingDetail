@@ -7,23 +7,26 @@ import Allcompanies from './pages/companies';
 // import ProtectedRoute from './components/auth/protected';
 // import AuthProvider  from './components/auth/useAuth';
 import Login from './pages/login';
+import Layout from './pages/layout';
 
 const App: React.FC = () => {
   return (
     <BrowserRouter>
       {/* <AuthProvider> */}
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/login" element={<Login />} />
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/login" element={<Login />} />
 
-          {/* Protected Routes */}
-          {/* <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}> */}
-            <Route path="/" element={<Home />} />
-            <Route path="/details" element={<Details />} />
-            <Route path="/allcompanies" element={<Allcompanies />} />
-            <Route path="*" element={<NoPage />} />
-          {/* </Route> */}
-        </Routes>
+        {/* Protected Routes */}
+        {/* <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}> */}
+        <Route path="/" element={<Layout />} >
+          <Route path="/" element={<Home />} />
+          <Route path="/details" element={<Details />} />
+          <Route path="/allcompanies" element={<Allcompanies />} />
+          <Route path="*" element={<NoPage />} />
+        </Route>
+        {/* </Route> */}
+      </Routes>
       {/* </AuthProvider> */}
     </BrowserRouter>
   );
