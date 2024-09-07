@@ -11,20 +11,20 @@ import Login from './pages/login';
 const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <AuthProvider>
+      {/* <AuthProvider> */}
         <Routes>
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
 
           {/* Protected Routes */}
-          <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+          {/* <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}> */}
             <Route path="/" element={<Home />} />
             <Route path="/details" element={<Details />} />
             <Route path="/allcompanies" element={<Allcompanies />} />
             <Route path="*" element={<NoPage />} />
-          </Route>
+          {/* </Route> */}
         </Routes>
-      </AuthProvider>
+      {/* </AuthProvider> */}
     </BrowserRouter>
   );
 };
