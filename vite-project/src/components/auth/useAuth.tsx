@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { useState, useContext, createContext } from 'react';
 
 // Create a context for authentication
 export const AuthContext = createContext<boolean>(false);
