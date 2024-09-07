@@ -3,11 +3,17 @@ import dotenv from "dotenv";
 import SearchRouter from "./src/routes/search";
 import { router } from "./src/routes/tables";
 import AuthRouter from "./src/routes/auth";
+import cors from "cors";
 // configures dotenv to work in your application
 dotenv.config();
 const app = express();
 
 const PORT = process.env.PORT;
+
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST'],
+}));
 
 app.get("/", (request: Request, response: Response) => { 
   response.status(200).send("Hello World");

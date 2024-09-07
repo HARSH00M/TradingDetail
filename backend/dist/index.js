@@ -8,10 +8,15 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const search_1 = __importDefault(require("./src/routes/search"));
 const tables_1 = require("./src/routes/tables");
 const auth_1 = __importDefault(require("./src/routes/auth"));
+const cors_1 = __importDefault(require("cors"));
 // configures dotenv to work in your application
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT;
+app.use((0, cors_1.default)({
+    origin: '*',
+    methods: ['GET', 'POST'],
+}));
 app.get("/", (request, response) => {
     response.status(200).send("Hello World");
 });
