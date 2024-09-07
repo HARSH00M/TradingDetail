@@ -44,7 +44,6 @@ router.get('/find', async (req : Request, res) => {
             SELECT * FROM transactions 
             WHERE Symbol ILIKE ${symbol + '%'};
         `;
-        console.log(searchResults)
         res.json(searchResults);
     } catch (error) {
         console.error(error);
