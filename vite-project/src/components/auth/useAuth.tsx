@@ -15,7 +15,9 @@ const AuthProvider = ({ children } : Props) => {
   
 const user = localStorage.getItem('user')
 const [isAuthenticated, setIsAuthenticated] = useState(user ? true : false);
-  
+  if(user){
+    setIsAuthenticated(true)
+  }
 
   return (
     <AuthContext.Provider value={isAuthenticated}>
