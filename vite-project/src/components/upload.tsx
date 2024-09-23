@@ -90,7 +90,7 @@ const CsvUploader: React.FC = () => {
 
   // Check localStorage for cached CSV data on component mount
   useEffect(() => {
-    const cachedCsv = getCsvFromLocalStorage();
+    const cachedCsv : any = getCsvFromLocalStorage();
     if (cachedCsv) {
       setCsvData(cachedCsv.csvData);
       setColumns(cachedCsv.columns);
