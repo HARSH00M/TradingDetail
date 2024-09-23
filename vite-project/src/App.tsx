@@ -8,6 +8,7 @@ import Allcompanies from './pages/companies';
 // import AuthProvider  from './components/auth/useAuth';
 import Login from './pages/login';
 import Layout from './pages/layout';
+import CsvUploader from './components/upload';
 
 const App: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/details" element={<Details />} />
           <Route path="/allcompanies" element={<Allcompanies />} />
+          <Route path="/test" element={<CsvUploader/>} />
           <Route path="*" element={<NoPage />} />
         </Route>
         {/* </Route> */}

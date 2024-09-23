@@ -4,7 +4,9 @@ import { searchBySym } from "../services/search";
 import { Navigate } from 'react-router-dom';
 import { useQuery } from "@tanstack/react-query";
 import Table from "../components/Table";
-import CompanyProfile from "../components/companyProfile";
+import CompanyProfile from "../components/CompanyProfile/companyProfile";
+import Spinner from "../components/spinner";
+import NewCompanyProfile from "../components/CompanyProfile/newCompanyProfile";
 
 export default function Details({ }) {
   const location = useLocation();
@@ -31,19 +33,21 @@ export default function Details({ }) {
   );
 
 
-  console.log(data)
-
 
   return (
-    <div>
+    <div  className="h-full">
 
       <div>
-        <CompanyProfile company={comp!} symbol={sym!} />
+      {isLoading ? <Spinner/>: null}
+
+        {data && data.stock ? <NewCompanyProfile data={data?.stock} name={comp}/> : null}
+        {data && !data.stock ? <CompanyProfile company={comp!} symbol={sym!} /> : null}
+
+        
       </div>
 
-      <div>
-        {isLoading ? <div>Loading...</div> : null}
-        {data ? <div className="mt-8"><Table data={data} /></div> : null}
+      <div className="md:px-8 px-2 ">
+        {data ? <div className="mt-8"><Table data={data.promoters} /></div> : null}
         {error ? <div>Error: {error?.message}</div> : null}
       </div>
     </div>

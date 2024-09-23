@@ -1,0 +1,36 @@
+
+type FinancialData = {
+    bsecode: string;
+    changeindiiholdings1year: string;
+    changeinfiiholdings1year: string;
+    changeinpromoterholdings1year: string;
+    closeprice: string;
+    debttoequity: string;
+    debttoequity3yearsback: string;
+    evtoebitda: string;
+    fiftytwowhdistance: string;
+    fiftytwowl: string;
+    fixedassets3yearsback: string;
+    fixedassetslatestyear: string;
+    industry: string;
+    marketcapitalization: string;
+    nsesymbol: string;
+    patgrowthqoq: string;
+    patgrowthttm: string;
+    pbtgrowthttm: string;
+    pricetobookvalue: string;
+    pricetoearnings: string;
+    pricetosales: string;
+    promoterholdings: string;
+    returns1m: string;
+    returns1w: string;
+    returns3m: string;
+    returns6m: string;
+    revenuegrowthttm: string;
+    roce: string;
+    sector: string;
+    sma20d: string;
+    strengthvsnifty500monthly: string;
+    strengthvsnifty500weekly: string;
+    _id: string;
+};

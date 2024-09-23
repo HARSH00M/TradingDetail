@@ -6,12 +6,13 @@ export default function NavigationBar() {
 
     return (
         <nav
-            className="sticky top-0 z-10 block w-full max-w-full px-4 py-2 text-white bg-slate-900 rounded-none shadow-lg shadow-black/50 h-max  bg-opacity-90 backdrop-blur-2xl backdrop-saturate-200 lg:px-8 lg:py-4">
+            className="sticky top-0 z-10 block w-full max-w-full px-4 py-2 text-white bg-gray-900 rounded-none shadow-lg shadow-black/50 h-max  bg-opacity-90 backdrop-blur-2xl backdrop-saturate-200 lg:px-8 lg:py-4">
             <div className="flex items-center justify-between text-blue-gray-900">
-                <a href='/'
+                <Link to='/'
                     className="mr-4 block cursor-pointer py-1.5 font-sans text-base font-medium leading-relaxed text-inherit antialiased">
-                    Navigation
-                </a>
+                    {/* <img src="/Finlytics.png" alt="Finlytics" className="h-14" /> */}
+                    Finlytics
+                </Link>
                 <div className="flex items-center gap-4">
                     <div className="hidden mr-4 lg:block">
                         <ul className="flex flex-col gap-2 mt-2 mb-4 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">

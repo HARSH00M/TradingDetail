@@ -4,10 +4,11 @@ import {
 } from '@tanstack/react-query'
 
 import { AllCompanies } from '../services/search'
-import Search from '../components/search'
+import Search from '../components/search/search'
 import Pagination from '../components/pagination'
 import { useState } from 'react'
 import Card from '../components/card'
+import Spinner from '../components/spinner'
 
 export default function Allcompanies() {
   const [currentPage, setCurrentPage ] = useState<number>(0)
@@ -19,13 +20,8 @@ export default function Allcompanies() {
   })
 
 
-
-  
-
-
   if (data){
     var Data = data.allCompanies;
-    console.log("data : ",Data)
     var pages = data.pages
   }
 
@@ -42,11 +38,9 @@ export default function Allcompanies() {
       </div>
     )
 
-  if (isPending) return <div>Loading...</div>
+  if (isPending) return <Spinner />
 
-  if (error) return <div>
-An error has occurred:  {error.message}
-  </div>
+  if (error) return <div>An error has occurred</div>
 
 
 }

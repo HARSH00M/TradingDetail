@@ -1,3 +1,5 @@
 node_modules
 ./my-app
 .env
+ProjectDetails
+./backend/uploadContent/*

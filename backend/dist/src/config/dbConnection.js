@@ -5,12 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const postgres_1 = __importDefault(require("postgres"));
 const sql = (0, postgres_1.default)({
-    host: process.env.HOST,
-    port: parseInt(process.env.DB_PORT), // Port of database server
-    database: process.env.DATABASE_NAME, // Name of database to connect to
-    username: process.env.USERNAME, // Username of database user
-    password: process.env.PASSWORD,
-    ssl: { rejectUnauthorized: false }
+    host: 'localhost', // Host of database server
+    port: 5432, // Port of database server
+    database: 'postgres', // Name of database to connect to
+    username: 'postgres', // Username of database user
+    password: 'User@890',
+    // ssl: { rejectUnauthorized: false }
 }); // will use psql environment variables
 exports.default = sql;
 //# sourceMappingURL=dbConnection.js.map

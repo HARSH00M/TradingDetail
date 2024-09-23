@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { searchAutoComplete } from "../services/search";
+import { searchAutoComplete } from "../../services/search";
 import List from "./list";
 import { useState } from "react";
 
@@ -9,18 +9,15 @@ export default function Search() {
 
   const [searchTerm, setSearchTerm] = useState<string>(''); // State to trigger query fetch
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if(e.target.value !== '')
     setSearchTerm(e.target.value);
   };
   // React Query hook for fetching data dynamically
-  const { data, error } = useQuery({
+  const { data } = useQuery({
     queryKey: ['data', searchTerm],
     queryFn: () => searchAutoComplete(searchTerm), // Fetching function
   }
   );
 
-
-console.log(data)
 
   return (
     <div>
@@ -41,12 +38,8 @@ console.log(data)
 
             Search
           </button>
-
-          {/* {isLoading ? <div>Loading...</div> : null} */}
           {data?.length>0 ? <List data={data} /> : null}
           
-
-          {error ? <div>Error: {error?.message}</div> : null}
 
         </div>
       </div>

@@ -14,26 +14,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const router = (0, express_1.Router)();
-const dbConnection_1 = __importDefault(require("../config/dbConnection"));
+const config_1 = __importDefault(require("../database/config"));
+const table01_1 = require("../database/dashboard/table01");
+const table02_1 = require("../database/dashboard/table02");
+const table03_1 = require("../database/dashboard/table03");
 router.get('/search/:name', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name } = req.params;
-    const searchByName = yield (0, dbConnection_1.default) `
+    const companies = yield (0, config_1.default) `
     SELECT DISTINCT Symbol, Company 
     FROM transactions 
     WHERE Company ILIKE ${name + '%'};
     `;
     // const searchByName = await sql`create table Book(id int primary key, name text, description text)`
-    res.json(searchByName);
-}));
-router.get('/search/:name', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name } = req.params;
-    const searchByName = yield (0, dbConnection_1.default) `
-    SELECT DISTINCT Symbol, Company 
-    FROM transactions 
-    WHERE Company ILIKE ${name + '%'};
-    `;
-    // const searchByName = await sql`create table Book(id int primary key, name text, description text)`
-    res.json(searchByName);
+    return res.json(companies);
 }));
 router.get('/find', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const symbol = Array.isArray(req.query.symbol) ? req.query.symbol[0] : req.query.symbol;
@@ -42,13 +35,17 @@ router.get('/find', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     if (typeof symbol !== 'string' || typeof company !== 'string') {
         return res.status(400).json({ error: 'Invalid query parameters' });
     }
+    console.log(symbol, company);
     try {
-        // Assuming you are using an SQL query builder like 'pg-promise' or 'sql-template-strings'
-        const searchResults = yield (0, dbConnection_1.default) `
+        const promoters = yield (0, config_1.default) `
             SELECT * FROM transactions 
-            WHERE Symbol ILIKE ${symbol + '%'};
+            WHERE symbol=${symbol};
         `;
-        res.json(searchResults);
+        const stock_Detail = yield (0, config_1.default) `SELECT * FROM stockdata WHERE _id=${symbol};`;
+        res.json({
+            promoters: promoters,
+            stock: stock_Detail[0]
+        });
     }
     catch (error) {
         console.error(error);
@@ -59,28 +56,28 @@ router.get('/allcompanies', (req, res) => __awaiter(void 0, void 0, void 0, func
     const { page } = req.query;
     let offsetFrom = 0;
     let offsetTo = 0;
-    let totalPages = 0;
     let perPage = 10;
     if (page) {
         offsetFrom = parseInt(page) * perPage;
         offsetTo = offsetFrom + perPage;
     }
-    const allCompanies = yield (0, dbConnection_1.default) `
+    const allCompanies = yield (0, config_1.default) `
     SELECT DISTINCT Symbol, Company 
-    FROM transactions ORDER BY company ASC;
+    FROM transactions ORDER BY company ASC LIMIT ${offsetTo} OFFSET ${offsetFrom};
     `;
-    if (perPage > 0)
-        totalPages = Math.ceil(allCompanies.length / perPage);
+    const totalvalues = yield (0, config_1.default) `SELECT COUNT(*) AS total_rows FROM transactions;`;
+    const totalpages = Math.ceil(totalvalues[0].total_rows / perPage);
+    console.log(totalpages);
     const response = {
         allCompanies: allCompanies.slice(offsetFrom, offsetTo),
-        pages: totalPages
+        pages: totalpages
     };
     res.json(response);
 }));
 router.get('/insert', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // await sql`drop table Transactions`;
-        const result = yield (0, dbConnection_1.default) `create table Transactions(
+        const result = yield (0, config_1.default) `create table Transactions(
             id SERIAL PRIMARY KEY,
             symbol VARCHAR(255) NOT NULL,
             company VARCHAR(255) NOT NULL,
@@ -107,14 +104,26 @@ router.get('/insert', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         console.error('Connection error:', error);
     }
     finally {
-        yield dbConnection_1.default.end(); // Close the connection
+        yield config_1.default.end(); // Close the connection
         console.log('Connection closed.');
         res.json({ message: 'Connection closed.' });
     }
 }));
-router.get('/data', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const results = [];
-    res.json();
+router.get('/dashboard', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const data1 = yield (0, table01_1.MaximumNumbersOfTransactionsIndustryWise)();
+        const data2 = yield (0, table02_1.MaximumNumbersOfTransactionsSectorWise)();
+        const data3 = yield (0, table03_1.MaximumNumbersOfTransactionsCompanyWise)();
+        res.json({
+            data1: data1, data2: data2, data3: data3
+        });
+    }
+    catch (err) {
+        res.json({
+            error: err,
+            message: err.message
+        });
+    }
 }));
 exports.default = router;
 //# sourceMappingURL=search.js.map

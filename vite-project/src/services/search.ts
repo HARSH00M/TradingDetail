@@ -10,7 +10,6 @@ export const AllCompanies = async (page: number) => {
             url += `?page=${page}`;
           }
       
-          console.log('url: ', url)
           const response = await fetch(url);
       
           // Check if the response is ok (status is 200-299)
@@ -37,7 +36,7 @@ export const searchAutoComplete = (name: string) => {
 }
 
 
-export const searchBySym = (sym: string, comp : string) => {
+export const searchBySym = (sym: string, comp : string)  => {
         if (sym !== '')
                 return fetch(`${import.meta.env.VITE_API_URL}/find?symbol=${encodeURIComponent(sym)}&company=${encodeURIComponent(comp)}`).then((res) =>res.json())
         else

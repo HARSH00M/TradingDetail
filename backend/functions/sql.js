@@ -40,15 +40,7 @@ const sql = require('./connection');
 
 
 async function InsertColumn() {
-    // values[0],
-    // values[1],
-    // values[3],
-    // values[4],
-    // values[5],
-    // values[6],
-    // values[12],
-    // values[13],
-    // values[14])
+   
     try {
         // await sql`drop table Transactions`;
         const result = await sql`create table Transactions(

@@ -6,6 +6,7 @@ import AuthRouter from "./src/routes/auth";
 import cors from "cors";
 // configures dotenv to work in your application
 dotenv.config();
+
 const app = express();
 
 const PORT = process.env.PORT;
@@ -14,6 +15,9 @@ app.use(cors({
   origin: '*',
   methods: ['GET', 'POST'],
 }));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (request: Request, response: Response) => { 
   response.status(200).send("Hello World");

@@ -26,7 +26,6 @@ type DataType = {
 // Table component
 const Table = ({ data }: { data: DataType[] }) => {
   // Memoize columns to avoid unnecessary re-renders
-  console.log("data : ", data)
   const columns = useMemo<MRT_ColumnDef<DataType>[]>(
     () => [
       {
@@ -50,6 +49,14 @@ const Table = ({ data }: { data: DataType[] }) => {
         header: 'No. of Securities Acquired/Disposed',
       },
       {
+        accessorKey: 'allotment_acquisition_date_from',
+        header: 'Allotment/Acquisition Date From',
+      },
+      {
+        accessorKey: 'allotment_acquisition_date_to',
+        header: 'Allotment/Acquisition Date To',
+      },
+      {
         accessorKey: 'transaction_type',
         header: 'Transaction Type',
       },
@@ -66,9 +73,10 @@ const Table = ({ data }: { data: DataType[] }) => {
         header: 'Mode of Acquisition',
       },
       {
-        accessorKey: 'broadcast_date_time',
-        header: 'Broadcast Date/Time',
-      },
+        accessorKey: 'initmation_to_company_date',
+        header: 'Initmation To Company Date',
+      }
+
     ],
     [] // Empty dependency array ensures this only runs once
   );

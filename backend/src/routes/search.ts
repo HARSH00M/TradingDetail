@@ -1,35 +1,29 @@
 import { Router, Request, Response } from "express"
 const router = Router()
-import sql from "../config/dbConnection"
-import fs from 'fs'
-import csv from 'csv-parser';
+import sql from '../database/config'
+import { MaximumNumbersOfTransactionsIndustryWise } from "../database/dashboard/table01"
+import { MaximumNumbersOfTransactionsSectorWise } from "../database/dashboard/table02"
+import { MaximumNumbersOfTransactionsCompanyWise } from "../database/dashboard/table03"
 
 
-router.get('/search/:name', async (req : Request, res) => {  
+router.get('/search/:name', async (req: Request, res) => {
     const { name } = req.params
-    
-    const searchByName = await sql`
+
+    const companies = await sql`
     SELECT DISTINCT Symbol, Company 
     FROM transactions 
     WHERE Company ILIKE ${name + '%'};
     `;
+
+
+
+
     // const searchByName = await sql`create table Book(id int primary key, name text, description text)`
-    res.json(searchByName)
+    return res.json(companies)
 
 })
-router.get('/search/:name', async (req : Request, res) => {  
-    const { name } = req.params
-    
-    const searchByName = await sql`
-    SELECT DISTINCT Symbol, Company 
-    FROM transactions 
-    WHERE Company ILIKE ${name + '%'};
-    `;
-    // const searchByName = await sql`create table Book(id int primary key, name text, description text)`
-    res.json(searchByName)
 
-})
-router.get('/find', async (req : Request, res) => {  
+router.get('/find', async (req: Request, res) => {
     const symbol = Array.isArray(req.query.symbol) ? req.query.symbol[0] : req.query.symbol;
     const company = Array.isArray(req.query.company) ? req.query.company[0] : req.query.company;
 
@@ -37,57 +31,63 @@ router.get('/find', async (req : Request, res) => {
     if (typeof symbol !== 'string' || typeof company !== 'string') {
         return res.status(400).json({ error: 'Invalid query parameters' });
     }
+    console.log(symbol, company)
 
     try {
-        // Assuming you are using an SQL query builder like 'pg-promise' or 'sql-template-strings'
-        const searchResults = await sql`
+        const promoters = await sql`
             SELECT * FROM transactions 
-            WHERE Symbol ILIKE ${symbol + '%'};
+            WHERE symbol=${symbol};
         `;
-        res.json(searchResults);
+        const stock_Detail = await sql`SELECT * FROM stockdata WHERE _id=${symbol};`;
+
+
+        res.json({
+            promoters: promoters,
+            stock: stock_Detail[0]
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-router.get('/allcompanies', async (req : Request, res) => { 
-    const {page} = req.query ;
+router.get('/allcompanies', async (req: Request, res) => {
+    const { page } = req.query;
 
-    
-    let offsetFrom : number = 0;
-    let offsetTo : number= 0;
-    let totalPages : number = 0;
-    let perPage : number= 10;
+
+    let offsetFrom: number = 0;
+    let offsetTo: number = 0;
+    let perPage: number = 10;
 
     if (page) {
-        offsetFrom = parseInt(page as string) * perPage; 
-        offsetTo =  offsetFrom + perPage; 
+        offsetFrom = parseInt(page as string) * perPage;
+        offsetTo = offsetFrom + perPage;
     }
 
 
     const allCompanies = await sql`
     SELECT DISTINCT Symbol, Company 
-    FROM transactions ORDER BY company ASC;
+    FROM transactions ORDER BY company ASC LIMIT ${offsetTo} OFFSET ${offsetFrom};
     `;
+    const totalvalues = await sql`SELECT COUNT(*) AS total_rows FROM transactions;`;
+    const totalpages = Math.ceil(totalvalues[0].total_rows / perPage);
 
-    if(perPage>0)
-    totalPages = Math.ceil(allCompanies.length/perPage);
-    
+    console.log(totalpages)
+
     const response = {
-        allCompanies : allCompanies.slice(offsetFrom, offsetTo),
-        pages: totalPages
+        allCompanies: allCompanies.slice(offsetFrom, offsetTo),
+        pages: totalpages
     }
-    
+
     res.json(response)
 })
 
-router.get('/insert', async (req : Request, res) => {  
+router.get('/insert', async (req: Request, res) => {
 
-        
-        try {
-            // await sql`drop table Transactions`;
-            const result = await sql`create table Transactions(
+
+    try {
+        // await sql`drop table Transactions`;
+        const result = await sql`create table Transactions(
             id SERIAL PRIMARY KEY,
             symbol VARCHAR(255) NOT NULL,
             company VARCHAR(255) NOT NULL,
@@ -108,22 +108,39 @@ router.get('/insert', async (req : Request, res) => {
             exchange VARCHAR(255),
             broadcast_date_time VARCHAR(255)
         )`;
-            // const result = JSON.parse(response);
-        } catch (error) {
-            console.error('Connection error:', error);
-        } finally {
-            await sql.end(); // Close the connection
-            console.log('Connection closed.');
-            res.json({ message: 'Connection closed.' });
-        }
-    
+        // const result = JSON.parse(response);
+    } catch (error) {
+        console.error('Connection error:', error);
+    } finally {
+        await sql.end(); // Close the connection
+        console.log('Connection closed.');
+        res.json({ message: 'Connection closed.' });
+    }
+
 })
 
-router.get('/data', async (req : Request, res) => {  
-    const results: any[] = [];
-    res.json()
+router.get('/dashboard', async (req: Request, res) => {
+
+    try{
+        const data1 = await MaximumNumbersOfTransactionsIndustryWise()
+        const data2 = await MaximumNumbersOfTransactionsSectorWise()
+        const data3 = await MaximumNumbersOfTransactionsCompanyWise()
+
+        res.json({
+            data1 : data1, data2 : data2, data3 : data3
+        })
+    }catch(err){
+        res.json({
+            error : err,
+            message : err.message
+        })
+    }
+
 })
 
 
-export default router  
+
+
+
+export default router
 

@@ -1,8 +1,18 @@
+import {motion} from 'framer-motion'
+
 
 export default function CompanyProfile({ company, symbol }: { company: string, symbol: string }) {
 
     return (
-        <div className='h-40 flex flex-row my-10'>
+        <motion.div 
+        initial={{ scale: 0.5 }}
+  animate={{ scale: 1 }}
+  transition={{
+    type: "spring",
+    stiffness: 260,
+    damping: 20
+  }} role="button"
+        className='h-40 flex flex-row my-10'>
             <div className='mx-12 md:mx-44 flex justify-center items-center h-full '>
             <div className='h-full w-3 bg-cyan-400/70 shadow-md'></div>
                 <div className='px-4'>
@@ -11,6 +21,6 @@ export default function CompanyProfile({ company, symbol }: { company: string, s
                 </div>
 
             </div>
-        </div>
+        </motion.div>
     )
 }

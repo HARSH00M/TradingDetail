@@ -17,6 +17,8 @@ app.use((0, cors_1.default)({
     origin: '*',
     methods: ['GET', 'POST'],
 }));
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: true }));
 app.get("/", (request, response) => {
     response.status(200).send("Hello World");
 });
