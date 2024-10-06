@@ -1,32 +1,31 @@
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import { useQuery } from '@tanstack/react-query';
-import { dashboard } from "../../services/dashboard";
-import formatCrores from '../utilities/formatCrores';
+import { dashboard } from "../../../services/dashboard";
+import formatCrores from '../../utilities/formatCrores';
 
 
 
-const ApexChart = () => {
+const SectorApexChart = () => {
 
 
-  const { isLoading, error, data } = useQuery({
+  const { data } = useQuery({
     queryKey: ['dashboard'],
     queryFn: () => dashboard(),
   });
 
   
 
-  // Ensure data exists and has data1
-  if (!data || !data.data1 || !Array.isArray(data.data1)) {
+  // Ensure data exists and has data2
+  if (!data || !data.data2 || !Array.isArray(data.data2)) {
     return <div>No data available</div>;
   }
 
 
   // Prepare data for the chart
-  const categories = data.data1.map((item: any) => item.industry);
-  const series = data.data1.map((item: any) => formatCrores(item.total_value));
+  const categories = data.data2.map((item: any) => item.sector);
+  const series = data.data2.map((item: any) => formatCrores(item.total_value));
 
-  console.log(series)
 
   // Define the options for ApexChart
   const options: ApexOptions = {
@@ -73,4 +72,4 @@ const ApexChart = () => {
   );
 }
 
-export default ApexChart;
+export default SectorApexChart;

@@ -2,26 +2,73 @@ import { useMemo } from 'react';
 import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 
 // Define the data type
+[
+  "acquirerdisposer",
+  "acquisitiondatefrom",
+  "acquisitiondateto",
+  "broadcastdatetime",
+  "categoryofperson",
+  "company",
+  "derivativecontractspecification",
+  "derivativetypesecurity",
+  "exchange",
+  "id",
+  "intimationdate",
+  "modeofacquisition",
+  "notionalvaluebuy",
+  "notionalvaluesell",
+  "numofsecurityacquireddisposed",
+  "numofsecuritypost",
+  "numofsecurityprior",
+  "numofunitscontractbuy",
+  "numofunitscontractsell",
+  "regulation",
+  "remark",
+  "securitytypeacquireddisposed",
+  "securitytypepost",
+  "securitytypeprior",
+  "shareholdingpost",
+  "shareholdingprior",
+  "symbol",
+  "transactiontype",
+  "valueofsecurityacquireddisposed",
+  "xbrl"
+]
+
+
 type DataType = {
-  symbol: string;
-  company: string;
-  acquirer_disposer_name: string;
-  category_of_person: string;
-  no_of_security_prior: string;
-  shareholding_prior_percentage: string;
-  no_of_securities_acquired_disposed: string;
-  value_of_security_acquired_disposed: string;
-  transaction_type: string;
-  type_of_security_post: string;
-  no_of_security_post: string;
-  post_shareholding_percentage: string;
-  allotment_acquisition_date_from: string;
-  allotment_acquisition_date_to: string;
-  initmation_to_company_date: string;
-  mode_of_acquisition: string;
-  exchange: string;
-  broadcast_date_time: string;
-};
+  acquirerdisposer : string,
+acquisitiondatefrom : string,
+acquisitiondateto : string,
+broadcastdatetime : string,
+categoryofperson : string,
+company : string,
+derivativecontractspecification : string,
+derivativetypesecurity : string,
+exchange : string,
+id : string,
+intimationdate : string,
+modeofacquisition : string,
+notionalvaluebuy : string,
+notionalvaluesell : string,
+numofsecurityacquireddisposed : string,
+numofsecuritypost : string,
+numofsecurityprior : string,
+numofunitscontractbuy : string,
+numofunitscontractsell : string,
+regulation : string,
+remark : string,
+securitytypeacquireddisposed : string,
+securitytypepost : string,
+securitytypeprior : string,
+shareholdingpost : string,
+shareholdingprior : string,
+symbol : string,
+transactiontype : string,
+valueofsecurityacquireddisposed : string,
+xbrl : string
+}
+
 
 // Table component
 const Table = ({ data }: { data: DataType[] }) => {
@@ -29,51 +76,51 @@ const Table = ({ data }: { data: DataType[] }) => {
   const columns = useMemo<MRT_ColumnDef<DataType>[]>(
     () => [
       {
-        accessorKey: 'acquirer_disposer_name',
+        accessorKey: 'acquirerdisposer',
         header: 'Acquirer/Disposer Name',
       },
       {
-        accessorKey: 'category_of_person',
+        accessorKey: 'categoryofperson',
         header: 'Category of Person',
       },
       {
-        accessorKey: 'no_of_security_prior',
+        accessorKey: 'numofsecurityprior',
         header: 'No. of Securities Prior',
       },
       {
-        accessorKey: 'shareholding_prior_percentage',
+        accessorKey: 'shareholdingprior',
         header: 'Shareholding Prior (%)',
       },
       {
-        accessorKey: 'no_of_securities_acquired_disposed',
+        accessorKey: 'numofsecurityacquireddisposed',
         header: 'No. of Securities Acquired/Disposed',
       },
       {
-        accessorKey: 'allotment_acquisition_date_from',
+        accessorKey: 'acquisitiondatefrom',
         header: 'Allotment/Acquisition Date From',
       },
       {
-        accessorKey: 'allotment_acquisition_date_to',
+        accessorKey: 'acquisitiondateto',
         header: 'Allotment/Acquisition Date To',
       },
       {
-        accessorKey: 'transaction_type',
+        accessorKey: 'transactiontype',
         header: 'Transaction Type',
       },
       {
-        accessorKey: 'no_of_security_post',
+        accessorKey: 'numofsecuritypost',
         header: 'No. of Securities Post',
       },
       {
-        accessorKey: 'post_shareholding_percentage',
+        accessorKey: 'shareholdingpost',
         header: 'Post Shareholding (%)',
       },
       {
-        accessorKey: 'mode_of_acquisition',
+        accessorKey: 'modeofacquisition',
         header: 'Mode of Acquisition',
       },
       {
-        accessorKey: 'initmation_to_company_date',
+        accessorKey: 'intimationdate',
         header: 'Initmation To Company Date',
       }
 

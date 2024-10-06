@@ -5,6 +5,8 @@ import { useDropzone } from 'react-dropzone';  // Drag-and-drop library
 import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { saveCsvToLocalStorage, getCsvFromLocalStorage, removeCsvFromLocalStorage } from './storageUtil';  // Import storage utility
 import CheckboxCard from './checkboxCard';
+import { useNavigate } from 'react-router-dom';
+import Spinner from './spinner';
 
 // Define the structure of a CSV row (with dynamic keys)
 interface CsvRow {
@@ -12,8 +14,11 @@ interface CsvRow {
 }
 
 const CsvUploader: React.FC = () => {
+
+  const navigate = useNavigate();
   const [csvData, setCsvData] = useState<CsvRow[]>([]);       // Store parsed CSV data
   const [columns, setColumns] = useState<string[]>([]);       // Store columns from CSV
+  const [loader, setLoader] = useState<boolean>(false);       // Store columns from CSV
   const [selectedColumns, setSelectedColumns] = useState<string[]>([]);  // Store selected columns
 
   // Handle CSV file parsing when dropped
@@ -62,6 +67,7 @@ const CsvUploader: React.FC = () => {
 
   // Send selected data to the backend
   const handleSubmit = () => {
+    setLoader(true)
     const selectedData = csvData.map(row => {
       const filteredRow: CsvRow = {};
       selectedColumns.forEach(column => {
@@ -70,10 +76,16 @@ const CsvUploader: React.FC = () => {
       return filteredRow;
     });
 
-    axios.post('/api/upload-csv', { data: selectedData })
+    axios.post('http://localhost:3000/tables/ifupload',
+    //  { data: selectedData }
+    {data : "Hello"}
+     )
       .then((response) => {
         console.log('Data successfully sent to backend:', response.data);
         handleRemoveCsv();  // Clear the CSV data after sending it to the backend
+        setLoader(false);
+        return navigate('/history');
+
       })
       .catch((error) => {
         console.error('Error sending data to backend:', error);
@@ -107,6 +119,9 @@ const CsvUploader: React.FC = () => {
     [columns]
   );
 
+  if(loader){
+    return <Spinner/>
+  }
   return (
     <div style={{ padding: '20px' }}>
       <h2 className='px-4 py-10 text-3xl text-gray-800 font-bold '>Upload CSV File</h2>

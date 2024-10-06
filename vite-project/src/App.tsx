@@ -9,6 +9,7 @@ import Allcompanies from './pages/companies';
 import Login from './pages/login';
 import Layout from './pages/layout';
 import CsvUploader from './components/upload';
+import Uploadhistory from './pages/uploadhistory';
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
           <Route path="/details" element={<Details />} />
           <Route path="/allcompanies" element={<Allcompanies />} />
           <Route path="/test" element={<CsvUploader/>} />
+          <Route path="/history" element={<Uploadhistory/>} />
           <Route path="*" element={<NoPage />} />
         </Route>
         {/* </Route> */}
