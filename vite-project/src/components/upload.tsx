@@ -68,13 +68,13 @@ const CsvUploader: React.FC = () => {
   // Send selected data to the backend
   const handleSubmit = () => {
     setLoader(true)
-    const selectedData = csvData.map(row => {
-      const filteredRow: CsvRow = {};
-      selectedColumns.forEach(column => {
-        filteredRow[column] = row[column];
-      });
-      return filteredRow;
-    });
+    // const selectedData = csvData.map(row => {
+    //   const filteredRow: CsvRow = {};
+    //   selectedColumns.forEach(column => {
+    //     filteredRow[column] = row[column];
+    //   });
+    //   return filteredRow;
+    // });
 
     axios.post('http://localhost:3000/tables/ifupload',
     //  { data: selectedData }
