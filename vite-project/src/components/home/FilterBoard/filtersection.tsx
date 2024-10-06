@@ -1,4 +1,4 @@
-import DropDown from './dropdown'
+// import DropDown from './dropdown'
 
 export default function Filtersection() {
 
@@ -8,7 +8,7 @@ export default function Filtersection() {
     <h1>FilterSection</h1>
         </div>
         <div>
-        <DropDown />
+        {/* <DropDown /> */}
 
         </div>
     </div>

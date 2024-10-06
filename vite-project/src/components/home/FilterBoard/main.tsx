@@ -1,14 +1,14 @@
-import { useState } from "react"
-import FilterSection from "./filtersection"
+// import { useState } from "react"
+// import FilterSection from "./filtersection"
 
 export default function FilterBoard() {
-    const [data, setData] = useState('')
+    // const [data, setData] = useState('')
 
   return (
     <div>
-        FilterBoard
+        {/* FilterBoard */}
         {/* filter section */}
-        <FilterSection/>
+        {/* <FilterSection/> */}
         
         {/* table */}
     </div>
