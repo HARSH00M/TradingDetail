@@ -15,9 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const router = (0, express_1.Router)();
 const config_1 = __importDefault(require("../database/config"));
-const table01_1 = require("../database/dashboard/table01");
-const table02_1 = require("../database/dashboard/table02");
-const table03_1 = require("../database/dashboard/table03");
 router.get('/search/:name', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name } = req.params;
     const companies = yield (0, config_1.default) `
@@ -74,56 +71,38 @@ router.get('/allcompanies', (req, res) => __awaiter(void 0, void 0, void 0, func
     };
     res.json(response);
 }));
-router.get('/insert', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        // await sql`drop table Transactions`;
-        const result = yield (0, config_1.default) `create table Transactions(
-            id SERIAL PRIMARY KEY,
-            symbol VARCHAR(255) NOT NULL,
-            company VARCHAR(255) NOT NULL,
-            acquirer_disposer_name VARCHAR(255),
-            category_of_person VARCHAR(255),
-            no_of_security_prior VARCHAR(255),
-            shareholding_prior_percentage VARCHAR(255),
-            no_of_securities_acquired_disposed VARCHAR(255),
-            value_of_security_acquired_disposed VARCHAR(255),
-            transaction_type VARCHAR(255),
-            type_of_security_post VARCHAR(255),
-            no_of_security_post VARCHAR(255),
-            post_shareholding_percentage VARCHAR(255),
-            allotment_acquisition_date_from VARCHAR(255),
-            allotment_acquisition_date_to VARCHAR(255),
-            initmation_to_company_date VARCHAR(255),
-            mode_of_acquisition VARCHAR(255),
-            exchange VARCHAR(255),
-            broadcast_date_time VARCHAR(255)
-        )`;
-        // const result = JSON.parse(response);
-    }
-    catch (error) {
-        console.error('Connection error:', error);
-    }
-    finally {
-        yield config_1.default.end(); // Close the connection
-        console.log('Connection closed.');
-        res.json({ message: 'Connection closed.' });
-    }
-}));
-router.get('/dashboard', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const data1 = yield (0, table01_1.MaximumNumbersOfTransactionsIndustryWise)();
-        const data2 = yield (0, table02_1.MaximumNumbersOfTransactionsSectorWise)();
-        const data3 = yield (0, table03_1.MaximumNumbersOfTransactionsCompanyWise)();
-        res.json({
-            data1: data1, data2: data2, data3: data3
-        });
-    }
-    catch (err) {
-        res.json({
-            error: err,
-            message: err.message
-        });
-    }
-}));
+// router.get('/insert', async (req: Request, res) => {
+//     try {
+//         // await sql`drop table Transactions`;
+//         const result = await sql`create table Transactions(
+//             id SERIAL PRIMARY KEY,
+//             symbol VARCHAR(255) NOT NULL,
+//             company VARCHAR(255) NOT NULL,
+//             acquirer_disposer_name VARCHAR(255),
+//             category_of_person VARCHAR(255),
+//             no_of_security_prior VARCHAR(255),
+//             shareholding_prior_percentage VARCHAR(255),
+//             no_of_securities_acquired_disposed VARCHAR(255),
+//             value_of_security_acquired_disposed VARCHAR(255),
+//             transaction_type VARCHAR(255),
+//             type_of_security_post VARCHAR(255),
+//             no_of_security_post VARCHAR(255),
+//             post_shareholding_percentage VARCHAR(255),
+//             allotment_acquisition_date_from VARCHAR(255),
+//             allotment_acquisition_date_to VARCHAR(255),
+//             initmation_to_company_date VARCHAR(255),
+//             mode_of_acquisition VARCHAR(255),
+//             exchange VARCHAR(255),
+//             broadcast_date_time VARCHAR(255)
+//         )`;
+//         // const result = JSON.parse(response);
+//     } catch (error) {
+//         console.error('Connection error:', error);
+//     } finally {
+//         await sql.end(); // Close the connection
+//         console.log('Connection closed.');
+//         res.json({ message: 'Connection closed.' });
+//     }
+// })
 exports.default = router;
 //# sourceMappingURL=search.js.map

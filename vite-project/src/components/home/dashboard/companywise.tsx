@@ -48,7 +48,7 @@ const CompanyApexChart = () => {
   };
 
   // Format the series data
-  const formattedSeries = [{ data: series.slice(0,7) }];
+  const formattedSeries = [{ name : "transactions", data: series.slice(0,7) }];
 
   // Check if the data is valid
   const isSeriesValid = Array.isArray(formattedSeries) && formattedSeries.length > 0 && formattedSeries[0].data.length > 0;

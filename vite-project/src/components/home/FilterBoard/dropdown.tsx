@@ -2,15 +2,19 @@
 function DropDown({title, data, state, setState} : {title : string, data : string[],state : string,  setState : any}) {
 
     const handleChange = (event : any) => {
-      setState(event.target.value);
+      console.log([event.target.name], event.target.value)
+      setState((prev : any) => ({
+        ...prev,
+        [event.target.name]: event.target.value
+      }));
     };
   
     return (
-      <div style={{ padding: '20px' }}>
-          {data  ? 
-        <select id="gender" value={state} onChange={handleChange}>
-          <option value="" disabled>{title}</option>
-          {data?.map((value : string, index : any)=><option value={value} key={index}>{value}</option>)}
+      <div className="w-full">
+          {data?.length>0  ? 
+        <select id={title} value={state || " "} name={title} onChange={handleChange} className="w-44 overflow-x-scroll border border-gray-300 p-2 rounded-lg">
+          <option disabled>{title}</option>
+          {data?.map((value : string, index : any)=><option  value={value} key={index}>{value}</option>)}
         </select>
           : null}
   

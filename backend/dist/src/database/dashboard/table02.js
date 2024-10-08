@@ -18,12 +18,10 @@ function MaximumNumbersOfTransactionsSectorWise() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const result = yield (0, config_1.default) `SELECT sector, 
-            SUM(CAST(value_of_security_acquired_disposed AS numeric)) AS total_value
-            FROM transactions
-            WHERE value_of_security_acquired_disposed ~ '^[0-9]+(\.[0-9]+)?$'
-            GROUP BY sector
-            HAVING SUM(CAST(value_of_security_acquired_disposed AS numeric)) > 0
-            ORDER BY total_value DESC;
+        SUM(CAST(valueofsecurityacquireddisposed AS numeric)) AS total_value
+        FROM transactions GROUP BY sector
+        HAVING SUM(CAST(valueofsecurityacquireddisposed AS numeric)) > 0
+        ORDER BY total_value DESC;
          `;
             return result;
         }

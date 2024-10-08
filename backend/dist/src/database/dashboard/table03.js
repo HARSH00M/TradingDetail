@@ -17,13 +17,12 @@ const config_1 = __importDefault(require("../config"));
 function MaximumNumbersOfTransactionsCompanyWise() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const result = yield (0, config_1.default) `SELECT Symbol AS company, 
-            SUM(CAST(value_of_security_acquired_disposed AS numeric)) AS total_value
-            FROM transactions
-            WHERE value_of_security_acquired_disposed ~ '^[0-9]+(\.[0-9]+)?$'
-            GROUP BY Symbol
-            HAVING SUM(CAST(value_of_security_acquired_disposed AS numeric)) > 0
-            ORDER BY total_value DESC;
+            const result = yield (0, config_1.default) `SELECT Symbol, 
+        SUM(CAST(valueofsecurityacquireddisposed AS numeric)) AS total_value
+ FROM transactions GROUP BY Symbol 
+ HAVING SUM(CAST(valueofsecurityacquireddisposed AS numeric)) > 0
+ ORDER BY total_value DESC;
+ 
  `;
             return result;
         }

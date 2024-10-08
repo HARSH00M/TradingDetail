@@ -8,6 +8,9 @@ import  processfilename  from "../MulterCsvHandeling/ProcessFileAddress";
 import CreateStockDataDatabase from "../database/CreateStockDataDatabase";
 import sql from '../database/config'
 import { PerformTransactionUpdation } from "../database/TransactionUpdation";
+import CreateTransactionsDatabase from "../database/InsiderTrading/CreateInsiderTradingDatabase";
+import ProcessInsertionDatabase from "../database/InsiderTrading/ProcessInsertion";
+import { processCsvforTF } from "../MulterCsvHandeling/csvfile2";
 
 type CsvData = {
   [key: string]: string;
@@ -58,6 +61,27 @@ router.get('/data', (req: Request, res: Response) => {
 });
 
 
+
+// CREATING TABLE OF STOCK DATA AND INSERTING DATA INTO IT
+router.get('/createstockdatabase',async (req, res)=>{
+  try{
+
+    const result = await CreateStockDataDatabase();
+
+    res.json({
+      result : result,
+      message : "Created Stock Database"
+    })
+    
+  }catch(err){
+    console.log(err)
+    res.json({
+      error : err,
+      message : err.message
+    })
+  }
+  
+})
 router.post('/upload', upload(), async (req : Request, res : Response) => {
 
   try{
@@ -79,27 +103,6 @@ router.post('/upload', upload(), async (req : Request, res : Response) => {
 
   
 });
-
-router.get('/createstockdatabase',async (req, res)=>{
-  try{
-
-    const result = await CreateStockDataDatabase();
-
-    res.json({
-      result : result,
-      message : "Created Stock Database"
-    })
-    
-  }catch(err){
-    console.log(err)
-    res.json({
-      error : err,
-      message : err.message
-    })
-  }
-  
-})
-
 router.get('/transactionupdation', async (req, res)=>{
   try{
     const data = await PerformTransactionUpdation();
@@ -119,18 +122,23 @@ router.get('/transactionupdation', async (req, res)=>{
 }
 )
 
-router.get('/query', async (req : Request, res)=>{
+router.post('/ifupload',(req, res)=>{
+  console.log(req.body)
+  res.json({
+    message : "Data received"
+  })
+})
+
+// CREATING TABLE OF TRANSACTIONS AND INSERTING DATA INTO IT
+router.get('/createinsidertradingdatabase',async (req, res)=>{
   try{
-    const {query} = req.body;
-    console.log(query)
-    const result = await sql`SELECT industry, COUNT(acquirer_disposer_name) AS total_acquirer_disposer
-    FROM transactions
-    GROUP BY industry;
-    `;
+
+    const result = await CreateTransactionsDatabase();
 
     res.json({
-      query : result,
-    });
+      result : result,
+      message : "Created Insider Trading Database"
+    })
     
   }catch(err){
     console.log(err)
@@ -139,26 +147,75 @@ router.get('/query', async (req : Request, res)=>{
       message : err.message
     })
   }
+  
 })
 
-router.get('/delete', async (req, res)=>{
+router.post('/ifupload',upload(), async (req : Request, res)=>{
+
   try{
-    const query = await sql`select * from stockdata;`;
-    res.json({
-      query : query,
-    });
+
+    const filepath = processfilename(req.generatedFilename); 
+    const result : any = await processCsvforTF(filepath)
+    const insert = await ProcessInsertionDatabase(result);
+    console.log(result.slice(0, 5))
+    console.log(insert)
+    // const upsert = await (result);
     
-  }catch(error) {
     res.json({
-      message : error.message,
-      error : error
+      filename: req.generatedFilename,
+      insert : insert
+    });
+
+  }catch(err){
+    console.log(err.message);
+    console.log(err);
+    res.json({
+      error : err,
+      message : err.message
     })
-  } finally{
-    sql.end();
   }
 
-
 })
+
+
+
+
+
+// router.get('/query', async (req : Request, res)=>{
+//   try{
+//     const {query} = req.body;
+//     const result = await sql.unsafe(query)
+
+//     res.json({
+//       query : result,
+//     });
+    
+//   }catch(err){
+//     console.log(err)
+//     res.json({
+//       error : err,
+//       message : err.message
+//     })
+//   }
+// })
+
+// router.get('/delete', async (req, res)=>{
+//   try{
+//     const query = await sql`select * from stockdata;`;
+//     res.json({
+//       query : query,
+//     });
+    
+//   }catch(error) {
+//     res.json({
+//       message : error.message,
+//       error : error
+//     })
+//   } finally{
+//     sql.end();
+//   }
+
+
 export default router;
 
 

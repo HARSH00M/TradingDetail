@@ -23,6 +23,9 @@ const ProcessFileAddress_1 = __importDefault(require("../MulterCsvHandeling/Proc
 const CreateStockDataDatabase_1 = __importDefault(require("../database/CreateStockDataDatabase"));
 const config_1 = __importDefault(require("../database/config"));
 const TransactionUpdation_1 = require("../database/TransactionUpdation");
+const CreateInsiderTradingDatabase_1 = __importDefault(require("../database/InsiderTrading/CreateInsiderTradingDatabase"));
+const ProcessInsertion_1 = __importDefault(require("../database/InsiderTrading/ProcessInsertion"));
+const csvfile2_1 = require("../MulterCsvHandeling/csvfile2");
 exports.router = (0, express_1.Router)();
 const fields = [
     'SYM',
@@ -55,6 +58,23 @@ exports.router.get('/data', (req, res) => {
         res.json(results);
     });
 });
+// CREATING TABLE OF STOCK DATA AND INSERTING DATA INTO IT
+exports.router.get('/createstockdatabase', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield (0, CreateStockDataDatabase_1.default)();
+        res.json({
+            result: result,
+            message: "Created Stock Database"
+        });
+    }
+    catch (err) {
+        console.log(err);
+        res.json({
+            error: err,
+            message: err.message
+        });
+    }
+}));
 exports.router.post('/upload', (0, main_1.default)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const filepath = (0, ProcessFileAddress_1.default)(req.generatedFilename);
@@ -69,22 +89,6 @@ exports.router.post('/upload', (0, main_1.default)(), (req, res) => __awaiter(vo
         res.json({
             error: error,
             message: error.message
-        });
-    }
-}));
-exports.router.get('/createstockdatabase', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const result = yield (0, CreateStockDataDatabase_1.default)();
-        res.json({
-            result: result,
-            message: "Created Stock Database"
-        });
-    }
-    catch (err) {
-        console.log(err);
-        res.json({
-            error: err,
-            message: err.message
         });
     }
 }));
@@ -106,16 +110,19 @@ exports.router.get('/transactionupdation', (req, res) => __awaiter(void 0, void 
         config_1.default.end();
     }
 }));
-exports.router.get('/query', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.router.post('/ifupload', (req, res) => {
+    console.log(req.body);
+    res.json({
+        message: "Data received"
+    });
+});
+// CREATING TABLE OF TRANSACTIONS AND INSERTING DATA INTO IT
+exports.router.get('/createinsidertradingdatabase', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { query } = req.body;
-        console.log(query);
-        const result = yield (0, config_1.default) `SELECT industry, COUNT(acquirer_disposer_name) AS total_acquirer_disposer
-    FROM transactions
-    GROUP BY industry;
-    `;
+        const result = yield (0, CreateInsiderTradingDatabase_1.default)();
         res.json({
-            query: result,
+            result: result,
+            message: "Created Insider Trading Database"
         });
     }
     catch (err) {
@@ -126,22 +133,56 @@ exports.router.get('/query', (req, res) => __awaiter(void 0, void 0, void 0, fun
         });
     }
 }));
-exports.router.get('/delete', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.router.post('/ifupload', (0, main_1.default)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const query = yield (0, config_1.default) `select * from stockdata;`;
+        const filepath = (0, ProcessFileAddress_1.default)(req.generatedFilename);
+        const result = yield (0, csvfile2_1.processCsvforTF)(filepath);
+        const insert = yield (0, ProcessInsertion_1.default)(result);
+        console.log(result.slice(0, 5));
+        console.log(insert);
+        // const upsert = await (result);
         res.json({
-            query: query,
+            filename: req.generatedFilename,
+            insert: insert
         });
     }
-    catch (error) {
+    catch (err) {
+        console.log(err.message);
+        console.log(err);
         res.json({
-            message: error.message,
-            error: error
+            error: err,
+            message: err.message
         });
-    }
-    finally {
-        config_1.default.end();
     }
 }));
+// router.get('/query', async (req : Request, res)=>{
+//   try{
+//     const {query} = req.body;
+//     const result = await sql.unsafe(query)
+//     res.json({
+//       query : result,
+//     });
+//   }catch(err){
+//     console.log(err)
+//     res.json({
+//       error : err,
+//       message : err.message
+//     })
+//   }
+// })
+// router.get('/delete', async (req, res)=>{
+//   try{
+//     const query = await sql`select * from stockdata;`;
+//     res.json({
+//       query : query,
+//     });
+//   }catch(error) {
+//     res.json({
+//       message : error.message,
+//       error : error
+//     })
+//   } finally{
+//     sql.end();
+//   }
 exports.default = exports.router;
 //# sourceMappingURL=tables.js.map

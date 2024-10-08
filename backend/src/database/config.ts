@@ -12,7 +12,7 @@ export default postgres({
     password: process.env.PASSWORD, // e.g., your database password
     database: process.env.DATABASE, // e.g., the name of your database
     port: parseInt(process.env.DB_PORT),  
-    ssl: { rejectUnauthorized: false },              
+    // ssl: { rejectUnauthorized: false },              
   });
 
 

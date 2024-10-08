@@ -73,6 +73,9 @@ xbrl : string
 // Table component
 const Table = ({ data }: { data: DataType[] }) => {
   // Memoize columns to avoid unnecessary re-renders
+
+  
+  console.log("data from tables", data);
   const columns = useMemo<MRT_ColumnDef<DataType>[]>(
     () => [
       {
