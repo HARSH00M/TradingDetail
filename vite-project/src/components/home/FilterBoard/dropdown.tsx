@@ -5,7 +5,7 @@ function DropDown({title, data, state, setState} : {title : string, data : strin
       console.log([event.target.name], event.target.value)
       setState((prev : any) => ({
         ...prev,
-        [event.target.name]: event.target.value
+        [event.target.name]: event.target.value === "all" ? null : event.target.value,
       }));
     };
   
@@ -21,6 +21,9 @@ function DropDown({title, data, state, setState} : {title : string, data : strin
     >
       <option value="" disabled>
         {title}
+      </option>
+      <option value='all' >
+        all
       </option>
       {data.map((value: string, index: number) => ( value!==null ? 
         <option value={value} key={index}>

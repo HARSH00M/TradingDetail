@@ -57,7 +57,10 @@ const IndustryApexChart = () => {
 
   // If both series and categories are valid, render the chart
   return (
-    <div>
+    <div className='flex flex-col  rounded-xl md:py-4 md:px-2 shadow-lg shadow-black/30'>
+      <div className='flex w-full'>
+        <h1 className='text-gray-800 md:text-xl mx-auto '>Industry wise the data of maximum transactions</h1>
+      </div>
       {isSeriesValid && isCategoriesValid ? (
         <ReactApexChart 
           options={options} 

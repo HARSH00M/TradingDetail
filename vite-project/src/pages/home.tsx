@@ -6,9 +6,6 @@ import Search from "../components/search/search";
 // import Table from "../components/Table";
 
 export default function Home() {
-  
-
-  
 
 
   
@@ -23,6 +20,7 @@ export default function Home() {
           <CompanyApexChart/>
       </div>
       <div>
+      <hr className='border-gray-300 my-12' />
         <FilterBoard/>
       </div>
       <div>
