@@ -3,6 +3,7 @@ import { ApexOptions } from 'apexcharts';
 import { useQuery } from '@tanstack/react-query';
 import { dashboard } from "../../../services/dashboard";
 import formatCrores from '../../utilities/formatCrores';
+import Skeleton from './skeleton';
 
 
 
@@ -18,7 +19,7 @@ const SectorApexChart = () => {
 
   // Ensure data exists and has data2
   if (!data || !data.data2 || !Array.isArray(data.data2)) {
-    return <div>No data available</div>;
+    return <Skeleton/>;
   }
 
 
@@ -66,7 +67,7 @@ const SectorApexChart = () => {
           width={500}
         />
       ) : (
-        <p>No data available for the chart.</p>
+        <Skeleton/>
       )}
     </div>
   );

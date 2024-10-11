@@ -3,6 +3,7 @@ import { ApexOptions } from 'apexcharts';
 import { useQuery } from '@tanstack/react-query';
 import { dashboard } from "../../../services/dashboard";
 import formatCrores from '../../utilities/formatCrores';
+import Skeleton from './skeleton';
 
 
 
@@ -18,7 +19,7 @@ const CompanyApexChart = () => {
 
   // Ensure data exists and has data3
   if (!data || !data.data3 || !Array.isArray(data.data3)) {
-    return <div>No data available</div>;
+    return <Skeleton/>;
   }
 
 
@@ -66,7 +67,7 @@ const CompanyApexChart = () => {
           width={500}
         />
       ) : (
-        <p>No data available for the chart.</p>
+        null
       )}
     </div>
   );
