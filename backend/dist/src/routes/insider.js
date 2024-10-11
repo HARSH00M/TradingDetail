@@ -20,28 +20,29 @@ const table03_1 = require("../database/dashboard/table03");
 const table01_1 = require("../database/dashboard/table01");
 const table02_1 = require("../database/dashboard/table02");
 router.post('/find', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { from, to, securitytype = null, modeofacquisition = null, transactiontype = null } = req.body;
-    // const from = "2024-06-01";
-    // const to = "2024-06-02"
+    let { from, to, securitytype = null, modeofacquisition = null, transactiontype = null } = req.body;
+    if (!from || !to) {
+        from = "2024-07-11";
+        to = "2024-08-11";
+    }
     // Check if 'from' and 'to' are of correct type
-    console.log("request made");
     if (typeof from !== 'string' || typeof to !== 'string') {
         return res.status(400).json({ error: 'Invalid or missing "from" or "to" query parameters' });
     }
+    console.log(from, to, securitytype, modeofacquisition, transactiontype);
     try {
         const data = yield (0, config_1.default) `
             SELECT * FROM transactions 
-            WHERE acquisitiondateto BETWEEN ${from} AND ${to}
+            WHERE acquisitiondatefrom BETWEEN ${from} AND ${to} 
             ${securitytype ? (0, config_1.default) `AND securitytypeprior = ${securitytype}` : (0, config_1.default) ``}
             ${transactiontype ? (0, config_1.default) `AND transactiontype = ${transactiontype}` : (0, config_1.default) ``}
             ${modeofacquisition ? (0, config_1.default) `AND modeofacquisition = ${modeofacquisition}` : (0, config_1.default) ``}
-            ORDER BY acquisitiondateto DESC;
+            ORDER BY acquisitiondatefrom ASC;
         `;
-        console.log(data.length);
+        console.log(data);
         res.json(data);
     }
     catch (error) {
-        console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }));
@@ -67,14 +68,12 @@ router.get('/filtervalues', (req, res) => __awaiter(void 0, void 0, void 0, func
         });
     }
     catch (error) {
-        console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }));
 router.get('/performtransactionupdation', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, TransactionUpdation_1.PerformTransactionUpdation)();
-        console.log('updation done industry column added');
         res.json({
             message: 'updation done industry column added'
         });

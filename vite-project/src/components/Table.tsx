@@ -90,6 +90,7 @@ const Table = ({ data }: { data: DataType[] }) => {
         accessorKey: 'numofsecurityprior',
         header: 'No. of Securities Prior',
       },
+      
       {
         accessorKey: 'shareholdingprior',
         header: 'Shareholding Prior (%)',
@@ -97,6 +98,10 @@ const Table = ({ data }: { data: DataType[] }) => {
       {
         accessorKey: 'numofsecurityacquireddisposed',
         header: 'No. of Securities Acquired/Disposed',
+      },
+      {
+        accessorKey: 'valueofsecurityacquireddisposed',
+        header: 'Value of Securities Acquired/Disposed',
       },
       {
         accessorKey: 'acquisitiondatefrom',

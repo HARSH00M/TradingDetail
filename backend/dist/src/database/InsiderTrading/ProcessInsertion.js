@@ -53,7 +53,6 @@ function ProcessInsertionDatabase(stockDataArray) {
                         console.log(`Skipped insertion for stock data due to null values: ${JSON.stringify(sanitizedData)}`);
                         continue; // Skip to the next iteration
                     }
-                    console.log(sanitizedData);
                     // Parse and validate the date fields
                     const acquisitionDateFrom = parseDate(sanitizedData.acquisitionDateFrom);
                     const acquisitionDateTo = parseDate(sanitizedData.acquisitionDateTo);

@@ -5,6 +5,7 @@ import { router } from "./src/routes/tables";
 import AuthRouter from "./src/routes/auth";
 import InsiderRouter from "./src/routes/insider";
 import cors from "cors";
+import StockRouter from "./src/routes/stockdetail";
 import bodyParser from "body-parser";
 // configures dotenv to work in your application
 dotenv.config();
@@ -26,6 +27,7 @@ app.get("/", (request: Request, response: Response) => {
   response.status(200).send("Hello World");
 }); 
 
+app.use(StockRouter)
 app.use("/tables", router);
 app.use(AuthRouter);
 app.use(SearchRouter)

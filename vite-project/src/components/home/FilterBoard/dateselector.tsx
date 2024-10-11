@@ -63,7 +63,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ statename, setState }) => {
   }, [statename, setState]); // Ensure that changes to statename or setState trigger useEffect
 
   return (
-    <div className="relative h-10 w-20 min-w-[200px]">
+    <div className="relative min-w-[200px]">
       <input
         ref={datePickerRef}
         id="date-picker"

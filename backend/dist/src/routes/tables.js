@@ -110,12 +110,6 @@ exports.router.get('/transactionupdation', (req, res) => __awaiter(void 0, void 
         config_1.default.end();
     }
 }));
-exports.router.post('/ifupload', (req, res) => {
-    console.log(req.body);
-    res.json({
-        message: "Data received"
-    });
-});
 // CREATING TABLE OF TRANSACTIONS AND INSERTING DATA INTO IT
 exports.router.get('/createinsidertradingdatabase', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -138,8 +132,6 @@ exports.router.post('/ifupload', (0, main_1.default)(), (req, res) => __awaiter(
         const filepath = (0, ProcessFileAddress_1.default)(req.generatedFilename);
         const result = yield (0, csvfile2_1.processCsvforTF)(filepath);
         const insert = yield (0, ProcessInsertion_1.default)(result);
-        console.log(result.slice(0, 5));
-        console.log(insert);
         // const upsert = await (result);
         res.json({
             filename: req.generatedFilename,

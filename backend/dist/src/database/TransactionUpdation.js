@@ -17,10 +17,15 @@ const config_1 = __importDefault(require("./config"));
 function PerformTransactionUpdation() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            // await sql`ALTER TABLE transactions ADD COLUMN industry VARCHAR;`
-            // await sql`ALTER TABLE transactions ADD COLUMN sector VARCHAR;`
+            // const wait1 = await sql`ALTER TABLE transactions ADD COLUMN industry VARCHAR;`
+            // const wait2 = await sql`ALTER TABLE transactions ADD COLUMN sector VARCHAR;`
+            // if(wait1)
+            //     console.log("Added industry column to transactions table")
+            // if(wait2)
+            //     console.log("Added sector column to transactions table")
             const data = yield (0, config_1.default) `UPDATE transactions t SET "industry" = s.industry, "sector" = s.sector FROM stockdata s WHERE t.symbol = s.nsesymbol`;
-            console.log("Updated transactions table with industry and sector");
+            if (data)
+                console.log("Updated transactions table with industry and sector");
             return data;
         }
         catch (err) {

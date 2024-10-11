@@ -10,6 +10,7 @@ const tables_1 = require("./src/routes/tables");
 const auth_1 = __importDefault(require("./src/routes/auth"));
 const insider_1 = __importDefault(require("./src/routes/insider"));
 const cors_1 = __importDefault(require("cors"));
+const stockdetail_1 = __importDefault(require("./src/routes/stockdetail"));
 const body_parser_1 = __importDefault(require("body-parser"));
 // configures dotenv to work in your application
 dotenv_1.default.config();
@@ -25,6 +26,7 @@ app.use(body_parser_1.default.json());
 app.get("/", (request, response) => {
     response.status(200).send("Hello World");
 });
+app.use(stockdetail_1.default);
 app.use("/tables", tables_1.router);
 app.use(auth_1.default);
 app.use(search_1.default);

@@ -122,12 +122,6 @@ router.get('/transactionupdation', async (req, res)=>{
 }
 )
 
-router.post('/ifupload',(req, res)=>{
-  console.log(req.body)
-  res.json({
-    message : "Data received"
-  })
-})
 
 // CREATING TABLE OF TRANSACTIONS AND INSERTING DATA INTO IT
 router.get('/createinsidertradingdatabase',async (req, res)=>{
@@ -157,8 +151,6 @@ router.post('/ifupload',upload(), async (req : Request, res)=>{
     const filepath = processfilename(req.generatedFilename); 
     const result : any = await processCsvforTF(filepath)
     const insert = await ProcessInsertionDatabase(result);
-    console.log(result.slice(0, 5))
-    console.log(insert)
     // const upsert = await (result);
     
     res.json({

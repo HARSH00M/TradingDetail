@@ -11,14 +11,26 @@ function DropDown({title, data, state, setState} : {title : string, data : strin
   
     return (
       <div className="w-full">
-          {data?.length>0  ? 
-        <select id={title} value={state || " "} name={title} onChange={handleChange} className="w-44 overflow-x-scroll border border-gray-300 p-2 rounded-lg">
-          <option disabled>{title}</option>
-          {data?.map((value : string, index : any)=><option  value={value} key={index}>{value}</option>)}
-        </select>
-          : null}
-  
-      </div>
+  {data?.length > 0 ? (
+    <select
+      id={title}
+      value={state || ""}
+      name={title}
+      onChange={handleChange}
+      className="w-44 overflow-x-scroll border border-gray-300 p-2 rounded-lg"
+    >
+      <option value="" disabled>
+        {title}
+      </option>
+      {data.map((value: string, index: number) => ( value!==null ? 
+        <option value={value} key={index}>
+          {value}
+        </option> : ''
+      ))}
+    </select>
+  ) : null}
+</div>
+
     );
   }
   

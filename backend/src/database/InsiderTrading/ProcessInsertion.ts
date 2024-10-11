@@ -55,7 +55,6 @@ export default async function ProcessInsertionDatabase(stockDataArray: StockData
                     continue; // Skip to the next iteration
                 }
 
-                console.log(sanitizedData);
                 // Parse and validate the date fields
                 const acquisitionDateFrom = parseDate(sanitizedData.acquisitionDateFrom);
                 const acquisitionDateTo = parseDate(sanitizedData.acquisitionDateTo);

@@ -1,6 +1,6 @@
 type filterparameters = {
-  from : string,
-  to : string, 
+  from : string | null,
+  to : string | null, 
   securitytype : string | null,
   modeofacquisition : string | null,
   transactiontype : string | null

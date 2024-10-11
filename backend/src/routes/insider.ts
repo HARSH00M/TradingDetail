@@ -7,24 +7,29 @@ import { MaximumNumbersOfTransactionsIndustryWise } from "../database/dashboard/
 import { MaximumNumbersOfTransactionsSectorWise } from "../database/dashboard/table02";
 
 router.post('/find', async (req: Request, res) => {
-    const { from, to, securitytype = null, modeofacquisition = null,transactiontype  = null  } = req.body;
-    // const from = "2024-06-01";
-    // const to = "2024-06-02"
+    let { from, to, securitytype = null, modeofacquisition = null,transactiontype  = null  } = req.body;
+    if(!from || !to){
+        from = "2024-07-11";
+        to = "2024-08-11"
+    }
     // Check if 'from' and 'to' are of correct type
     if (typeof from !== 'string' || typeof to !== 'string') {
         return res.status(400).json({ error: 'Invalid or missing "from" or "to" query parameters' });
     }
 
+    console.log(from, to, securitytype, modeofacquisition, transactiontype);
+
     try {
         const data = await sql`
             SELECT * FROM transactions 
-            WHERE acquisitiondateto BETWEEN ${from} AND ${to}
+            WHERE acquisitiondatefrom BETWEEN ${from} AND ${to} 
             ${securitytype ? sql`AND securitytypeprior = ${securitytype}` : sql``}
             ${transactiontype ? sql`AND transactiontype = ${transactiontype}` : sql``}
             ${modeofacquisition ? sql`AND modeofacquisition = ${modeofacquisition}` : sql``}
-            ORDER BY acquisitiondateto DESC;
+            ORDER BY acquisitiondatefrom ASC;
         `;
 
+        console.log(data)
         res.json( data );
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });

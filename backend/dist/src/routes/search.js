@@ -32,7 +32,6 @@ router.get('/find', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     if (typeof symbol !== 'string' || typeof company !== 'string') {
         return res.status(400).json({ error: 'Invalid query parameters' });
     }
-    console.log(symbol, company);
     try {
         const promoters = yield (0, config_1.default) `
             SELECT * FROM transactions 
@@ -45,7 +44,6 @@ router.get('/find', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
     catch (error) {
-        console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }));
@@ -64,7 +62,6 @@ router.get('/allcompanies', (req, res) => __awaiter(void 0, void 0, void 0, func
     `;
     const totalvalues = yield (0, config_1.default) `SELECT COUNT(*) AS total_rows FROM transactions;`;
     const totalpages = Math.ceil(totalvalues[0].total_rows / perPage);
-    console.log(totalpages);
     const response = {
         allCompanies: allCompanies.slice(offsetFrom, offsetTo),
         pages: totalpages
