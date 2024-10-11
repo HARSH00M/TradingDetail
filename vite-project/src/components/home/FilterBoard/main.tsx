@@ -53,7 +53,7 @@ export default function FilterBoard() {
       <FilterSection reset={reset} filterstate={state} setState={setState} data={data}/>
 
 
-     <div className="md:min-w-screen max-w-screen md:max-w-screen-lg">
+     <div className="overflow-x-scroll md:overflow-x-auto md:min-w-screen max-w-screen md:max-w-screen-lg">
      {tabledata ? 
       <Table data={tabledata}/> : <Spinner/>
      }
