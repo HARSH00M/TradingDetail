@@ -29,7 +29,6 @@ router.post('/find', async (req: Request, res) => {
             ORDER BY acquisitiondatefrom ASC;
         `;
 
-        console.log(data)
         res.json( data );
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
