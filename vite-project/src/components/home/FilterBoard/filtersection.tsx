@@ -20,7 +20,7 @@ export default function FilterSection({ reset, filterstate, setState, data }: { 
   console.log(filterstate)
   console.log("Data2 : ", data)
 
-  return (<div>
+  return (<div className='px-14'>
     <div className='flex w-full md:py-8'>
       <h1 className='mx-auto text-3xl text-gray-700 font-semibold'>Recent Transactions Happened</h1>
     </div>

@@ -27,16 +27,14 @@ export default function FilterBoard() {
     queryKey: ['filtervalues'],
     queryFn: () => filtervalues(),
   });
+  
 
   const {data : tabledata} = useQuery({
     queryKey : ['table', state], 
     queryFn : () => applyfilter({from : state.fromdate, to : state.todate, securitytype : state.securitytype, modeofacquisition : state.modeofacquisition, transactiontype : state.transactiontype}),
   })
 
-  // function apply(){
-  //   refetch();
-  //   console.log("apply", tabledata)
-  // }
+ 
   function reset(){
     setState({
       fromdate: null,
@@ -50,12 +48,12 @@ export default function FilterBoard() {
 
 
   return (
-    <div className="md:min-h-screen">
-      <div className="flex max-w-screen justify-center ">
+    <div className="md:min-h-screen shadow-md shadow-black/30 flex flex-col items-center justify-center">
 
       <FilterSection reset={reset} filterstate={state} setState={setState} data={data}/>
-      </div>
-     <div className="overflow-x-scroll md:min-w-screen max-w-screen md:max-w-screen-lg">
+
+
+     <div className="md:min-w-screen max-w-screen md:max-w-screen-lg">
      {tabledata ? 
       <Table data={tabledata}/> : <Spinner/>
      }

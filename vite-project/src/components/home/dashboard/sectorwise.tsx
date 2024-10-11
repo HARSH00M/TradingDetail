@@ -59,7 +59,7 @@ const SectorApexChart = () => {
   return (
     <div className='flex flex-col rounded-xl md:py-4 md:px-2 shadow-lg shadow-black/30'>
       <div className='flex w-full'>
-        <h1 className='text-gray-800 md:text-xl mx-auto '>Sector wise the data of maximum transactions</h1>
+        <h1 className='text-gray-800 md:text-xl mx-auto '>Sector wise data of maximum transactions(crore)</h1>
       </div>
       {isSeriesValid && isCategoriesValid ? (
         <ReactApexChart 
