@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/home';
 import Details from './pages/details';
-import NoPage from './pages/nopage';
+import NotFound from './pages/notfound';
 // import Layout from './pages/layout';
 import Allcompanies from './pages/companies';
 // import ProtectedRoute from './components/auth/protected';
@@ -27,7 +27,7 @@ const App: React.FC = () => {
           <Route path="/allcompanies" element={<Allcompanies />} />
           <Route path="/test" element={<CsvUploader/>} />
           <Route path="/history" element={<Uploadhistory/>} />
-          <Route path="*" element={<NoPage />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
         {/* </Route> */}
       </Routes>

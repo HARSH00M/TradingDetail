@@ -17,7 +17,6 @@ router.post('/find', async (req: Request, res) => {
         return res.status(400).json({ error: 'Invalid or missing "from" or "to" query parameters' });
     }
 
-    console.log(from, to, securitytype, modeofacquisition, transactiontype);
 
     try {
         const data = await sql`SELECT *, 
@@ -32,7 +31,6 @@ router.post('/find', async (req: Request, res) => {
         ORDER BY acquisitiondatefrom DESC; 
         `;
 
-        console.log(data?.slice(0, 5));
         res.json(data);
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });

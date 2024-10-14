@@ -29,7 +29,6 @@ router.post('/find', (req, res) => __awaiter(void 0, void 0, void 0, function* (
     if (typeof from !== 'string' || typeof to !== 'string') {
         return res.status(400).json({ error: 'Invalid or missing "from" or "to" query parameters' });
     }
-    console.log(from, to, securitytype, modeofacquisition, transactiontype);
     try {
         const data = yield (0, config_1.default) `SELECT *, 
         TO_CHAR(acquisitiondatefrom, 'YYYY-MM-DD') AS formatted_acquisitiondatefrom,
@@ -42,7 +41,6 @@ router.post('/find', (req, res) => __awaiter(void 0, void 0, void 0, function* (
         ${modeofacquisition ? (0, config_1.default) `AND modeofacquisition = ${modeofacquisition}` : (0, config_1.default) ``}
         ORDER BY acquisitiondatefrom DESC; 
         `;
-        console.log(data === null || data === void 0 ? void 0 : data.slice(0, 5));
         res.json(data);
     }
     catch (error) {
