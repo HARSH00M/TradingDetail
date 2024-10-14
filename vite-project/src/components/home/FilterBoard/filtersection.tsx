@@ -24,12 +24,25 @@ export default function FilterSection({ reset, filterstate, setState, data }: { 
     </div>
 
     <div className='flex justify-center md:justify-start items-center py-4 gap-y-2 gap-x-2 flex-wrap md:gap-x-4'>
+
       <DatePicker statename={"fromdate"} setState={setState} />
+
+
       <p>to</p>
+
+
       <DatePicker statename={"todate"} setState={setState} />
+
       <DropDown title={"modeofacquisition"} state={filterstate.modeofacquisition} data={data?.modeofacquisition} setState={setState} />
+      
       <DropDown title={"securitytype"} state={filterstate.securitytype} data={data?.securitytype} setState={setState} />
+      
       <DropDown title={"transactiontype"} state={filterstate.transactiontype} data={data?.transactiontype} setState={setState} />
+
+
+
+
+
       <button onClick={reset} className="rounded-md bg-red-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:shadow-none active:bg-red-700 hover:bg-red-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2" type="button">
         Reset 
       </button>

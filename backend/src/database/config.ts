@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-console.log(process.env.HOST, process.env.USER, process.env.PASSWORD, process.env.DATABASE, process.env.DB_PORT)
 
 export default postgres({
     host: process.env.HOST,         // e.g., localhost or a remote host

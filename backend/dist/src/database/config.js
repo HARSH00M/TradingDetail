@@ -7,7 +7,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const postgres_1 = __importDefault(require("postgres"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-console.log(process.env.HOST, process.env.USER, process.env.PASSWORD, process.env.DATABASE, process.env.DB_PORT);
 exports.default = (0, postgres_1.default)({
     host: process.env.HOST, // e.g., localhost or a remote host
     user: process.env.USER, // e.g., postgres

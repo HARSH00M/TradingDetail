@@ -33,7 +33,6 @@ router.post('/find', async (req: Request, res) => {
         ${modeofacquisition && modeofacquisition.length>0 ? sql`AND modeofacquisition IN ${sql(modeofacquisition)}` : sql``}
         ORDER BY acquisitiondatefrom DESC; 
         `;
-        console.log(data.length)
         res.json(data);
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });

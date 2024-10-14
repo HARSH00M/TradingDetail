@@ -42,7 +42,6 @@ router.post('/find', (req, res) => __awaiter(void 0, void 0, void 0, function* (
         ${modeofacquisition && modeofacquisition.length > 0 ? (0, config_1.default) `AND modeofacquisition IN ${(0, config_1.default)(modeofacquisition)}` : (0, config_1.default) ``}
         ORDER BY acquisitiondatefrom DESC; 
         `;
-        console.log(data.length);
         res.json(data);
     }
     catch (error) {
