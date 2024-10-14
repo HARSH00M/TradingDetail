@@ -10,7 +10,7 @@ function DropDown({title, data, state, setState} : {title : string, data : strin
     };
   
     return (
-      <div className="w-full">
+      <div >
   {data?.length > 0 ? (
     <select
       id={title}

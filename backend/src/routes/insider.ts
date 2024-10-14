@@ -7,10 +7,10 @@ import { MaximumNumbersOfTransactionsIndustryWise } from "../database/dashboard/
 import { MaximumNumbersOfTransactionsSectorWise } from "../database/dashboard/table02";
 
 router.post('/find', async (req: Request, res) => {
-    let { from, to, securitytype = null, modeofacquisition = null,transactiontype  = null  } = req.body;
-    if(!from || !to){
-        from = "2024-07-11";
-        to = "2024-08-11"
+    let { from, to, securitytype = null, modeofacquisition = null, transactiontype = null } = req.body;
+    if (!from || !to) {
+        from = "2024-08-11";
+        to = "2024-09-11"
     }
     // Check if 'from' and 'to' are of correct type
     if (typeof from !== 'string' || typeof to !== 'string') {
@@ -20,16 +20,20 @@ router.post('/find', async (req: Request, res) => {
     console.log(from, to, securitytype, modeofacquisition, transactiontype);
 
     try {
-        const data = await sql`
-            SELECT * FROM transactions 
-            WHERE acquisitiondatefrom BETWEEN ${from} AND ${to} 
-            ${securitytype ? sql`AND securitytypeprior = ${securitytype}` : sql``}
-            ${transactiontype ? sql`AND transactiontype = ${transactiontype}` : sql``}
-            ${modeofacquisition ? sql`AND modeofacquisition = ${modeofacquisition}` : sql``}
-            ORDER BY acquisitiondatefrom ASC;
+        const data = await sql`SELECT *, 
+        TO_CHAR(acquisitiondatefrom, 'YYYY-MM-DD') AS formatted_acquisitiondatefrom,
+        TO_CHAR(acquisitiondateto, 'YYYY-MM-DD') AS formatted_acquisitiondateto,
+        TO_CHAR(intimationdate, 'YYYY-MM-DD') AS formatted_intimationdate
+        FROM transactions
+        WHERE acquisitiondatefrom BETWEEN ${from} AND ${to}
+        ${securitytype ? sql`AND securitytypeprior = ${securitytype}` : sql``}
+        ${transactiontype ? sql`AND transactiontype = ${transactiontype}` : sql``}
+        ${modeofacquisition ? sql`AND modeofacquisition = ${modeofacquisition}` : sql``}
+        ORDER BY acquisitiondatefrom DESC; 
         `;
 
-        res.json( data );
+        console.log(data?.slice(0, 5));
+        res.json(data);
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
     }
@@ -63,38 +67,38 @@ router.get('/filtervalues', async (req: Request, res) => {
 });
 
 
-router.get('/performtransactionupdation',async (req, res)=>{
-    try{
+router.get('/performtransactionupdation', async (req, res) => {
+    try {
         await PerformTransactionUpdation();
         res.json({
-            message : 'updation done industry column added'
+            message: 'updation done industry column added'
         })
 
-    }catch(error){
+    } catch (error) {
         throw error;
     }
 })
 router.get('/dashboard', async (req: Request, res) => {
 
-    try{
+    try {
         const data1 = await MaximumNumbersOfTransactionsIndustryWise()
         const data2 = await MaximumNumbersOfTransactionsSectorWise()
         const data3 = await MaximumNumbersOfTransactionsCompanyWise()
-        
+
         res.json({
-            data1 : data1, data2 : data2, data3 : data3
+            data1: data1, data2: data2, data3: data3
         })
-    }catch(err){
+    } catch (err) {
         res.json({
-            error : err,
-            message : err.message
+            error: err,
+            message: err.message
         })
     }
 
 })
 
 
-router.get('/', async (req: Request, res) => {   
+router.get('/', async (req: Request, res) => {
     res.send("working")
 })
 

@@ -39,6 +39,9 @@ import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 type DataType = {
   acquirerdisposer : string,
 acquisitiondatefrom : string,
+formatted_acquisitiondatefrom : string,
+formatted_acquisitiondateto : string,
+formatted_intimationdate : string,
 acquisitiondateto : string,
 broadcastdatetime : string,
 categoryofperson : string,
@@ -79,17 +82,21 @@ const Table = ({ data }: { data: DataType[] }) => {
   const columns = useMemo<MRT_ColumnDef<DataType>[]>(
     () => [
       {
+        accessorKey: 'company',
+        header: 'Company',
+      },
+      {
+        accessorKey: 'symbol',
+        header: 'Symbol',
+      },
+      {
         accessorKey: 'acquirerdisposer',
         header: 'Acquirer/Disposer Name',
       },
-      {
-        accessorKey: 'categoryofperson',
-        header: 'Category of Person',
-      },
-      {
-        accessorKey: 'numofsecurityprior',
-        header: 'No. of Securities Prior',
-      },
+      // {
+      //   accessorKey: 'numofsecurityprior',
+      //   header: 'No. of Securities Prior',
+      // },
       
       {
         accessorKey: 'shareholdingprior',
@@ -101,37 +108,33 @@ const Table = ({ data }: { data: DataType[] }) => {
       },
       {
         accessorKey: 'valueofsecurityacquireddisposed',
-        header: 'Value of Securities Acquired/Disposed',
-      },
-      {
-        accessorKey: 'acquisitiondatefrom',
-        header: 'Allotment/Acquisition Date From',
-      },
-      {
-        accessorKey: 'acquisitiondateto',
-        header: 'Allotment/Acquisition Date To',
+        header: 'Value of Securities Acquired/Disposed(Rs.)',
       },
       {
         accessorKey: 'transactiontype',
-        header: 'Transaction Type',
+        header: 'Acquisition/Disposed Type',
       },
       {
-        accessorKey: 'numofsecuritypost',
-        header: 'No. of Securities Post',
+        accessorKey: 'formatted_acquisitiondatefrom',
+        header: 'Allotment/Acquisition Date From',
       },
       {
-        accessorKey: 'shareholdingpost',
-        header: 'Post Shareholding (%)',
+        accessorKey: 'formatted_acquisitiondateto',
+        header: 'Allotment/Acquisition Date To',
+      },
+      {
+        accessorKey: 'formatted_intimationdate',
+        header: 'Initmation To Company Date',
       },
       {
         accessorKey: 'modeofacquisition',
         header: 'Mode of Acquisition',
       },
       {
-        accessorKey: 'intimationdate',
-        header: 'Initmation To Company Date',
-      }
-
+        accessorKey: 'industry',
+        header: 'Industry',
+      },
+      
     ],
     [] // Empty dependency array ensures this only runs once
   );

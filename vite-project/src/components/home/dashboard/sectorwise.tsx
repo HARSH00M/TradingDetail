@@ -57,21 +57,18 @@ const SectorApexChart = () => {
 
   // If both series and categories are valid, render the chart
   return (
-    <div className='flex flex-col rounded-xl md:py-4 md:px-2 shadow-lg shadow-black/30'>
-      <div className='flex w-full'>
-        <h1 className='text-gray-800 md:text-xl mx-auto '>Sector wise data of maximum transactions(crore)</h1>
-      </div>
+    <div className='flex items-center flex-col rounded-xl py-2 px-4  md:py-4 md:px-2 shadow-lg shadow-black/30'>
+        <h1 className='text-gray-800 md:text-xl mx-auto'>Sector wise data of maximum transactions(crore)</h1>
       {isSeriesValid && isCategoriesValid ? (
-        <ReactApexChart 
-          options={options} 
-          series={formattedSeries} 
-          type="bar" 
-          height={350} 
-          width={500}
-        />
-      ) : (
-        <Skeleton/>
-      )}
+       <ReactApexChart 
+       options={options} 
+       series={formattedSeries} 
+       type="bar" 
+       className='w-[350px] h-[200px] md:w-[400px] md:h-[250px] px-2 flex justify-center items-center'
+       />
+     ) : (
+       null
+     )}
     </div>
   );
 }

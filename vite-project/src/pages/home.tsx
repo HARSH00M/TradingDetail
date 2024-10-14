@@ -14,7 +14,7 @@ export default function Home() {
       <h1 className="text-4xl font-semibold font-serif">Site Name</h1>
       <Search />
       
-      <div className="grid grid-cols-2 gap-5 p-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-5 justify-center items-center">
           <IndustryApexChart/>
           <SectorApexChart/>
           <CompanyApexChart/>

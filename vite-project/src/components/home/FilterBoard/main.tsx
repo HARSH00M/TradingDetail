@@ -48,12 +48,12 @@ export default function FilterBoard() {
 
 
   return (
-    <div className="md:min-h-screen shadow-md shadow-black/30 flex flex-col items-center justify-center">
+    <div className="md:min-h-screen shadow-md shadow-black/30 flex flex-col items-center justify-center w-full">
 
       <FilterSection reset={reset} filterstate={state} setState={setState} data={data}/>
 
 
-     <div className="overflow-x-scroll md:overflow-x-auto md:min-w-screen max-w-screen md:max-w-screen-lg">
+     <div className="overflow-clip w-96 md:w-full md:overflow-x-auto md:min-w-screen  md:max-w-screen-lg">
      {tabledata ? 
       <Table data={tabledata}/> : <Spinner/>
      }

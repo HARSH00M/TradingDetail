@@ -22,8 +22,8 @@ const table02_1 = require("../database/dashboard/table02");
 router.post('/find', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { from, to, securitytype = null, modeofacquisition = null, transactiontype = null } = req.body;
     if (!from || !to) {
-        from = "2024-07-11";
-        to = "2024-08-11";
+        from = "2024-08-11";
+        to = "2024-09-11";
     }
     // Check if 'from' and 'to' are of correct type
     if (typeof from !== 'string' || typeof to !== 'string') {
@@ -31,14 +31,18 @@ router.post('/find', (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
     console.log(from, to, securitytype, modeofacquisition, transactiontype);
     try {
-        const data = yield (0, config_1.default) `
-            SELECT * FROM transactions 
-            WHERE acquisitiondatefrom BETWEEN ${from} AND ${to} 
-            ${securitytype ? (0, config_1.default) `AND securitytypeprior = ${securitytype}` : (0, config_1.default) ``}
-            ${transactiontype ? (0, config_1.default) `AND transactiontype = ${transactiontype}` : (0, config_1.default) ``}
-            ${modeofacquisition ? (0, config_1.default) `AND modeofacquisition = ${modeofacquisition}` : (0, config_1.default) ``}
-            ORDER BY acquisitiondatefrom ASC;
+        const data = yield (0, config_1.default) `SELECT *, 
+        TO_CHAR(acquisitiondatefrom, 'YYYY-MM-DD') AS formatted_acquisitiondatefrom,
+        TO_CHAR(acquisitiondateto, 'YYYY-MM-DD') AS formatted_acquisitiondateto,
+        TO_CHAR(intimationdate, 'YYYY-MM-DD') AS formatted_intimationdate
+        FROM transactions
+        WHERE acquisitiondatefrom BETWEEN ${from} AND ${to}
+        ${securitytype ? (0, config_1.default) `AND securitytypeprior = ${securitytype}` : (0, config_1.default) ``}
+        ${transactiontype ? (0, config_1.default) `AND transactiontype = ${transactiontype}` : (0, config_1.default) ``}
+        ${modeofacquisition ? (0, config_1.default) `AND modeofacquisition = ${modeofacquisition}` : (0, config_1.default) ``}
+        ORDER BY acquisitiondatefrom DESC; 
         `;
+        console.log(data === null || data === void 0 ? void 0 : data.slice(0, 5));
         res.json(data);
     }
     catch (error) {
