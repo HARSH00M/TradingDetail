@@ -10,8 +10,8 @@ export default function Home() {
 
   
   return (
-    <div className="flex min-h-screen justify-center items-center flex-col">
-      <h1 className="text-4xl font-semibold font-serif">Site Name</h1>
+    <div className="flex min-h-screen justify-center items-center flex-col mb-20 md:mb-0 ">
+      <h1 className="text-4xl font-semibold font-serif">Filytics</h1>
       <Search />
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-5 justify-center items-center">

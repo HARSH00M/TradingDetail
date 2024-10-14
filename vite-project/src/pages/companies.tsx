@@ -28,7 +28,7 @@ export default function Allcompanies() {
 
   if (data)
     return (
-      <div className="relative text-gray-700 bg-white  w-full flex flex-col justify-center items-center my-8">
+      <div className="relative text-gray-700 bg-white  w-full flex flex-col justify-center items-center my-8 mb-20">
         <Search  />
         <nav className="grid grid-cols-1 md:grid-cols-2 md:gap-x-20 justify-between p-2 font-sans text-base font-normal text-blue-gray-700">
           {Data.map((value : any, index : number) => <Card key={index} index={index} value={value} />
