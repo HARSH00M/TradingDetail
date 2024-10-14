@@ -7,17 +7,19 @@ import { MaximumNumbersOfTransactionsIndustryWise } from "../database/dashboard/
 import { MaximumNumbersOfTransactionsSectorWise } from "../database/dashboard/table02";
 
 router.post('/find', async (req: Request, res) => {
-    let { from, to, securitytype = null, modeofacquisition = null, transactiontype = null } = req.body;
+    let {amountfrom, amountto, from, to, securitytype = null, modeofacquisition = null, transactiontype = null } = req.body;
     if (!from || !to) {
         from = "2024-08-11";
         to = "2024-09-11"
     }
+    
     // Check if 'from' and 'to' are of correct type
     if (typeof from !== 'string' || typeof to !== 'string') {
         return res.status(400).json({ error: 'Invalid or missing "from" or "to" query parameters' });
     }
-
-
+    
+    
+    
     try {
         const data = await sql`SELECT *, 
         TO_CHAR(acquisitiondatefrom, 'YYYY-MM-DD') AS formatted_acquisitiondatefrom,
@@ -25,12 +27,13 @@ router.post('/find', async (req: Request, res) => {
         TO_CHAR(intimationdate, 'YYYY-MM-DD') AS formatted_intimationdate
         FROM transactions
         WHERE acquisitiondatefrom BETWEEN ${from} AND ${to}
-        ${securitytype ? sql`AND securitytypeprior = ${securitytype}` : sql``}
-        ${transactiontype ? sql`AND transactiontype = ${transactiontype}` : sql``}
-        ${modeofacquisition ? sql`AND modeofacquisition = ${modeofacquisition}` : sql``}
+        ${(amountfrom && amountto) ? sql`AND valueofsecurityacquireddisposed > ${amountfrom} AND valueofsecurityacquireddisposed < ${amountto}` : sql``}
+        ${securitytype && securitytype.length>0 ? sql`AND securitytypepost IN ${sql(securitytype)}` : sql``}
+        ${transactiontype && transactiontype.length>0 ? sql`AND transactiontype IN ${sql(transactiontype)}` : sql``}
+        ${modeofacquisition && modeofacquisition.length>0 ? sql`AND modeofacquisition IN ${sql(modeofacquisition)}` : sql``}
         ORDER BY acquisitiondatefrom DESC; 
         `;
-
+        console.log(data.length)
         res.json(data);
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });

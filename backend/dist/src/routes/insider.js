@@ -20,7 +20,7 @@ const table03_1 = require("../database/dashboard/table03");
 const table01_1 = require("../database/dashboard/table01");
 const table02_1 = require("../database/dashboard/table02");
 router.post('/find', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { from, to, securitytype = null, modeofacquisition = null, transactiontype = null } = req.body;
+    let { amountfrom, amountto, from, to, securitytype = null, modeofacquisition = null, transactiontype = null } = req.body;
     if (!from || !to) {
         from = "2024-08-11";
         to = "2024-09-11";
@@ -36,11 +36,13 @@ router.post('/find', (req, res) => __awaiter(void 0, void 0, void 0, function* (
         TO_CHAR(intimationdate, 'YYYY-MM-DD') AS formatted_intimationdate
         FROM transactions
         WHERE acquisitiondatefrom BETWEEN ${from} AND ${to}
-        ${securitytype ? (0, config_1.default) `AND securitytypeprior = ${securitytype}` : (0, config_1.default) ``}
-        ${transactiontype ? (0, config_1.default) `AND transactiontype = ${transactiontype}` : (0, config_1.default) ``}
-        ${modeofacquisition ? (0, config_1.default) `AND modeofacquisition = ${modeofacquisition}` : (0, config_1.default) ``}
+        ${(amountfrom && amountto) ? (0, config_1.default) `AND valueofsecurityacquireddisposed > ${amountfrom} AND valueofsecurityacquireddisposed < ${amountto}` : (0, config_1.default) ``}
+        ${securitytype && securitytype.length > 0 ? (0, config_1.default) `AND securitytypepost IN ${(0, config_1.default)(securitytype)}` : (0, config_1.default) ``}
+        ${transactiontype && transactiontype.length > 0 ? (0, config_1.default) `AND transactiontype IN ${(0, config_1.default)(transactiontype)}` : (0, config_1.default) ``}
+        ${modeofacquisition && modeofacquisition.length > 0 ? (0, config_1.default) `AND modeofacquisition IN ${(0, config_1.default)(modeofacquisition)}` : (0, config_1.default) ``}
         ORDER BY acquisitiondatefrom DESC; 
         `;
+        console.log(data.length);
         res.json(data);
     }
     catch (error) {
