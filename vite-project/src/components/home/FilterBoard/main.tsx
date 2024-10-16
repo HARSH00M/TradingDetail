@@ -26,6 +26,8 @@ export default function FilterBoard() {
   const { data } = useQuery({
     queryKey: ['filtervalues'],
     queryFn: () => filtervalues(),
+    refetchOnWindowFocus : false,
+    refetchOnMount : false
   });
   
 

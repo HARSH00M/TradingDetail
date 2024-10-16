@@ -17,6 +17,8 @@ export default function Allcompanies() {
   const { isPending, error, data } = useQuery({
     queryKey: ['allcompanies', currentPage ],
     queryFn: ()=>AllCompanies(currentPage),
+    refetchOnMount : false,
+    refetchOnWindowFocus : false
   })
 
 

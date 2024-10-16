@@ -14,7 +14,9 @@ export default function Search() {
   // React Query hook for fetching data dynamically
   const { data } = useQuery({
     queryKey: ['data', searchTerm],
-    queryFn: () => searchAutoComplete(searchTerm), // Fetching function
+    queryFn: () => searchAutoComplete(searchTerm), 
+    refetchOnMount : false,
+    refetchOnWindowFocus : false// Fetching function
   }
   );
 
