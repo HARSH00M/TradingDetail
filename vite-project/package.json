@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "vite test",
-    "test:coverage": "vite test --coverage",
+    "test:coverage": "vite test --coverage : false",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
