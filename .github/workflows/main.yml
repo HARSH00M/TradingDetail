@@ -19,14 +19,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'  # Specify your Node.js version
+          node-version: '20'  # Specify your Node.js version
 
       - name: Install frontend dependencies
-        working-directory: ./vite-app    # Adjust path if different
+        working-directory: ./vite-project    # Adjust path if different
         run: npm install
 
       - name: Run frontend tests
-        working-directory: ./vite-app    # Adjust path if different
+        working-directory: ./vite-project   # Adjust path if different
         run: npm test                     # Change this if your test command is different
 
       - name: Install backend dependencies
@@ -38,5 +38,5 @@ jobs:
         run: npm test                     # Change this if your test command is different
 
       - name: Generate coverage report (if applicable)
-        working-directory: ./vite-app     # Adjust path if your coverage script is in the frontend
+        working-directory: ./vite-project    # Adjust path if your coverage script is in the frontend
         run: npm run test:coverage        # Change this if your coverage command is different
