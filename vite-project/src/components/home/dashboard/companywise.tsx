@@ -13,6 +13,8 @@ const CompanyApexChart = () => {
   const {  data } = useQuery({
     queryKey: ['dashboard'],
     queryFn: () => dashboard(),
+    refetchOnMount : false,
+    refetchOnWindowFocus : false
   });
 
   

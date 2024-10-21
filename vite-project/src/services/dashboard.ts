@@ -59,7 +59,8 @@ export const filtervalues = async () => {
 
 export const applyfilter = async (params : filterparameters ) => {
   try {
-    let url = `${import.meta.env.VITE_API_URL}/insider/find`;
+
+    var url = `${import.meta.env.VITE_API_URL}/insider/companywise`;
 
     // Check if both `from` and `to` are non-empty strings
     

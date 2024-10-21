@@ -28,7 +28,9 @@ export default function Details({ }) {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['searchBySym', sym, comp],
-    queryFn: () => searchBySym(sym!, comp!), // Fetching function
+    queryFn: () => searchBySym(sym!, comp!),
+    refetchOnMount : false,
+    refetchOnWindowFocus : false // Fetching function
   }
   );
 

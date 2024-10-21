@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -7,19 +7,21 @@ interface DatePickerProps {
   setState: React.Dispatch<React.SetStateAction<any>>; // Correct type for setState
 }
 
-const DatePicker: React.FC<DatePickerProps> = ({ statename, setState }) => {
+export interface DatePickerRef {
+  resetDate: () => void; // Expose a resetDate method
+}
+
+const DatePicker = forwardRef<DatePickerRef, DatePickerProps>(({ statename, setState }, ref) => {
   const datePickerRef = useRef<HTMLInputElement | null>(null); // Define the ref with the correct type
 
   useEffect(() => {
     if (datePickerRef.current) {
       const datepicker = flatpickr(datePickerRef.current, {
         dateFormat: 'd-m-Y', // Set date format to dd-MM-yyyy
-        onChange: (selectedDates) => {
+        onChange: (selectedDates: any) => {
           // Get the selected date in the specified format
           const selectedDate = selectedDates.length > 0 ? flatpickr.formatDate(selectedDates[0], 'd-m-Y') : null;
-          
-          // Get the selected date
-          
+
           // Update state with the selected date using statename as the key
           setState((prevState: any) => ({
             ...prevState,
@@ -62,6 +64,19 @@ const DatePicker: React.FC<DatePickerProps> = ({ statename, setState }) => {
     }
   }, [statename, setState]); // Ensure that changes to statename or setState trigger useEffect
 
+  // Expose resetDate method to parent via ref
+  useImperativeHandle(ref, () => ({
+    resetDate() {
+      if (datePickerRef.current) {
+        datePickerRef.current.value = ''; // Clear the input value
+        setState((prevState: any) => ({
+          ...prevState,
+          [statename]: null, // Reset the selected date in the state
+        }));
+      }
+    },
+  }));
+
   return (
     <div className="relative min-w-[200px]">
       <input
@@ -75,6 +90,6 @@ const DatePicker: React.FC<DatePickerProps> = ({ statename, setState }) => {
       </label>
     </div>
   );
-};
+});
 
 export default DatePicker;

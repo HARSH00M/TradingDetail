@@ -13,6 +13,8 @@ const SectorApexChart = () => {
   const { data } = useQuery({
     queryKey: ['dashboard'],
     queryFn: () => dashboard(),
+    refetchOnMount : false,
+    refetchOnWindowFocus : false
   });
 
   
