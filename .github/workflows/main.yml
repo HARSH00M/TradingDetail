@@ -3,10 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - master      # Change to 'master' as your default branch
+      - master      
   pull_request:
     branches:
-      - master      # Change to 'master' as your default branch
+      - master      
 
 jobs:
   test:
@@ -19,24 +19,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20'  # Specify your Node.js version
-
-      - name: Install frontend dependencies
-        working-directory: ./vite-project    # Adjust path if different
-        run: npm install
-
-      - name: Run frontend tests
-        working-directory: ./vite-project   # Adjust path if different
-        run: npm test                     # Change this if your test command is different
+          node-version: '20'  
 
       - name: Install backend dependencies
-        working-directory: ./backend      # Adjust path if different
+        working-directory: ./backend      
         run: npm install
 
       - name: Run backend tests
-        working-directory: ./backend      # Adjust path if different
-        run: npm test                     # Change this if your test command is different
+        working-directory: ./backend      
+        run: npm test                     
 
-      - name: Generate coverage report (if applicable)
-        working-directory: ./vite-project    # Adjust path if your coverage script is in the frontend
-        run: npm run test:coverage        # Change this if your coverage command is different
+    
