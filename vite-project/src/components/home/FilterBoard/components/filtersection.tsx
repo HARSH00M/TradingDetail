@@ -1,28 +1,40 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import DatePicker, { DatePickerRef } from './dateselector'; // Import DatePicker with DatePickerRef type
 
-type DataProps = {
-  modeofacquisition: string[];
-  securitytype: string[];
-  transactiontype: string[];
-};
+// type DataProps = {
+//   modeofacquisition: string[];
+//   securitytype: string[];
+//   transactiontype: string[];
+// };
+
+// export default function FilterSection({
+//   apply,
+//   filterstate,
+//   reset,
+//   setState,
+//   data,
+// }: {
+//   apply: any;
+//   reset: any;
+//   filterstate: any;
+//   setState: any;
+//   data: DataProps;
+// }) {
+
 
 export default function FilterSection({
   apply,
-  filterstate,
   reset,
   setState,
-  data,
 }: {
   apply: any;
   reset: any;
-  filterstate: any;
   setState: any;
-  data: DataProps;
 }) {
   const fromDatePickerRef = useRef<DatePickerRef>(null); // Create refs for DatePickers
   const toDatePickerRef = useRef<DatePickerRef>(null);
 
+  
   // Function to reset the date pickers
   function resetAll() {
     if (fromDatePickerRef.current) fromDatePickerRef.current.resetDate(); // Reset "from" date

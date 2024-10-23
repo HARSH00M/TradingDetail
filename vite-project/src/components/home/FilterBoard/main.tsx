@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { applyfilter, filtervalues } from "../../../services/dashboard";
+import { applyfilter} from "../../../services/dashboard";
+// import { applyfilter, filtervalues } from "../../../services/dashboard";
 import FilterSection from "./components/filtersection";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../../spinner";
@@ -25,12 +26,12 @@ export default function FilterBoard() {
     transactiontype:  null
   })
 
-  const { data } = useQuery({
-    queryKey: ['filtervalues'],
-    queryFn: () => filtervalues(),
-    refetchOnWindowFocus : false,
-    refetchOnMount : false
-  });
+  // const { data } = useQuery({
+  //   queryKey: ['filtervalues'],
+  //   queryFn: () => filtervalues(),
+  //   refetchOnWindowFocus : false,
+  //   refetchOnMount : false
+  // });
   
 
   const {data : tabledata, isFetching, refetch} = useQuery({
@@ -65,7 +66,8 @@ export default function FilterBoard() {
   return (
     <div className="md:min-h-screen shadow-md shadow-black/30 flex flex-col items-center justify-center w-full">
 
-      <FilterSection apply={apply} reset={reset} filterstate={state} setState={setState} data={data}/>
+      {/* <FilterSection apply={apply} reset={reset} filterstate={state} setState={setState} data={data}/> */}
+      <FilterSection apply={apply} reset={reset}  setState={setState} />
 
 
      <div className="overflow-clip w-96 md:w-full md:overflow-x-auto md:min-w-screen  md:max-w-screen-lg">
