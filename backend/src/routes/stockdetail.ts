@@ -1,5 +1,5 @@
 import router from "./search";
-import sql from "../../config/dbConnection";
+import sql from "../database/config"
 const StockRouter = router;
 StockRouter.get('/stockdetail', async (req , res) => {
     try{

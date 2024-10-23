@@ -1,12 +1,9 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
-import SearchRouter from "./src/routes/search";
-import { router } from "./src/routes/tables";
-import AuthRouter from "./src/routes/auth";
-import InsiderRouter from "./src/routes/insider";
+
 import cors from "cors";
-import StockRouter from "./src/routes/stockdetail";
 import bodyParser from "body-parser";
+import router from "./router";
 // configures dotenv to work in your application
 dotenv.config();
 
@@ -23,15 +20,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get("/", (request: Request, response: Response) => { 
-  response.status(200).send("Hello World");
-}); 
+app.use(router)
 
-app.use(StockRouter)
-app.use("/tables", router);
-app.use(AuthRouter);
-app.use(SearchRouter)
-app.use('/insider', InsiderRouter)
+
 
 app.listen(PORT, () => { 
   console.log("Server running at PORT: ", PORT); 

@@ -13,12 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const search_1 = __importDefault(require("./search"));
-const dbConnection_1 = __importDefault(require("../../config/dbConnection"));
+const config_1 = __importDefault(require("../database/config"));
 const StockRouter = search_1.default;
 StockRouter.get('/stockdetail', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log("code executed");
-        const result = yield (0, dbConnection_1.default) `SELECT table_name FROM information_schema.tables`;
+        const result = yield (0, config_1.default) `SELECT table_name FROM information_schema.tables`;
         res.json({
             response: result
         });
