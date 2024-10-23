@@ -65,52 +65,125 @@ GROUP BY
     t.acquirerdisposer ASC
 
 `;
+// const companywise = (from : string, to : string) => sql`
+// WITH LatestHoldings AS (
+//     SELECT 
+//         symbol,
+//         company,
+//         acquisitiondatefrom,
+//         shareholdingprior,
+//         shareholdingpost,
+//         ROW_NUMBER() OVER (PARTITION BY symbol, company ORDER BY acquisitiondatefrom DESC) AS rn
+//     FROM 
+//         transactions
+//     WHERE 
+//         acquisitiondatefrom BETWEEN ${from} AND ${to}
+//         AND categoryofperson IN ('Director', 'Promoter Group', 'Promoters')
+//         AND securitytypeprior IN ('Equity Shares', 'Warrent')
+//         AND transactiontype = 'Buy'
+// )
+// SELECT 
+//     lh.symbol,
+//     lh.company,
+//     SUM(t.numofsecurityacquireddisposed) AS totalnumofsecurity,
+//     SUM(t.valueofsecurityacquireddisposed) AS totalvalueofsecurity,
+//     (SELECT shareholdingprior FROM LatestHoldings WHERE rn = 1 AND symbol = lh.symbol AND company = lh.company) AS total_shareholdingprior,
+//     (SELECT shareholdingpost FROM LatestHoldings WHERE rn = 1 AND symbol = lh.symbol AND company = lh.company) AS total_shareholdingpost,
+//     (SELECT shareholdingpost FROM LatestHoldings WHERE rn = 1 AND symbol = lh.symbol AND company = lh.company) - (SELECT shareholdingprior FROM LatestHoldings WHERE rn = 1 AND symbol = lh.symbol AND company = lh.company) AS holding_difference,
+//     s.nsesymbol, s.bsecode, s._id, s.marketcapitalization, s.closeprice, s.industry, s.sector, s.pricetoearnings, s.pricetosales, s.revenuegrowthttm, s.patgrowthttm, s.patgrowthqoq, s.pricetobookvalue, s.returns1w, s.returns1m, s.returns3m, s.returns6m, s.strengthvsnifty500monthly, s.sma20d, s.evtoebitda, s.fixedassets3yearsback, s.fiftytwowhdistance, s.fiftytwowl, s.strengthvsnifty500weekly, s.debttoequity, s.debttoequity3yearsback, s.changeindiiholdings1year, s.changeinfiiholdings1year, s.promoterholdings, s.changeinpromoterholdings1year, s.roce, s.pbtgrowthttm, s.fixedassetslatestyear,
+//     TO_CHAR(MAX(t.acquisitiondatefrom), 'DD-MM-YYYY') AS latest_acquisition_date
+// FROM 
+//     transactions t
+// JOIN 
+//     LatestHoldings lh ON t.symbol = lh.symbol AND t.company = lh.company
+// JOIN 
+//     stockdata s ON t.symbol = s.nsesymbol
+// WHERE 
+//     t.acquisitiondatefrom BETWEEN ${from} AND ${to}
+//     AND t.categoryofperson IN ('Director', 'Promoter Group', 'Promoters')
+//     AND t.securitytypeprior IN ('Equity Shares', 'Warrent')
+//     AND t.transactiontype = 'Buy'
+// GROUP BY 
+//     lh.symbol, lh.company, 
+//     s.nsesymbol, s.bsecode, s._id, s.marketcapitalization, s.closeprice, s.industry, s.sector, s.pricetoearnings, s.pricetosales, s.revenuegrowthttm, s.patgrowthttm, s.patgrowthqoq, s.pricetobookvalue, s.returns1w, s.returns1m, s.returns3m, s.returns6m, s.strengthvsnifty500monthly, s.sma20d, s.evtoebitda, s.fixedassets3yearsback, s.fiftytwowhdistance, s.fiftytwowl, s.strengthvsnifty500weekly, s.debttoequity, s.debttoequity3yearsback, s.changeindiiholdings1year, s.changeinfiiholdings1year, s.promoterholdings, s.changeinpromoterholdings1year, s.roce, s.pbtgrowthttm, s.fixedassetslatestyear
+// ORDER BY 
+//     latest_acquisition_date DESC;
+// `
 const companywise = (from, to) => (0, config_1.default) `
-WITH LatestHoldings AS (
+WITH LatestShareholding AS (
     SELECT 
-        symbol,
+        categoryOfPerson,
+        symbol, 
         company,
-        acquisitiondatefrom,
-        shareholdingprior,
-        shareholdingpost,
-        ROW_NUMBER() OVER (PARTITION BY symbol, company ORDER BY acquisitiondatefrom DESC) AS rn
+        acquisitionDateFrom,
+        shareholdingPrior,
+        shareholdingPost,
+        ROW_NUMBER() OVER (
+            PARTITION BY company 
+            ORDER BY ABS(acquisitionDateFrom - ${to}::date)
+        ) AS rn,
+        SUM(numOfSecurityAcquiredDisposed) OVER (PARTITION BY company) AS total_num_of_security_acquired_disposed,
+        SUM(valueOfSecurityAcquiredDisposed) OVER (PARTITION BY company) AS total_value_of_security_acquired_disposed,
+        MAX(shareholdingPrior) OVER (PARTITION BY company) AS latest_shareholdingPrior,
+        MAX(shareholdingPost) OVER (PARTITION BY company) AS latest_shareholdingPost
     FROM 
         transactions
     WHERE 
-        acquisitiondatefrom BETWEEN '2023-09-11' AND '2024-10-11'
-        AND categoryofperson IN ('Director', 'Promoter Group', 'Promoters')
-        AND securitytypeprior IN ('Equity Shares', 'Warrent')
-        AND transactiontype = 'Buy'
+        categoryOfPerson IN ('Director', 'Promoters', 'Promoter group') AND
+        transactionType = 'Buy' 
+        AND acquisitionDateFrom BETWEEN ${from} AND ${to}
 )
 
 SELECT 
-    lh.symbol,
-    lh.company,
-    SUM(t.numofsecurityacquireddisposed) AS totalnumofsecurity,
-    SUM(t.valueofsecurityacquireddisposed) AS totalvalueofsecurity,
-    (SELECT shareholdingprior FROM LatestHoldings WHERE rn = 1 AND symbol = lh.symbol AND company = lh.company) AS total_shareholdingprior,
-    (SELECT shareholdingpost FROM LatestHoldings WHERE rn = 1 AND symbol = lh.symbol AND company = lh.company) AS total_shareholdingpost,
-    (SELECT shareholdingpost FROM LatestHoldings WHERE rn = 1 AND symbol = lh.symbol AND company = lh.company) - (SELECT shareholdingprior FROM LatestHoldings WHERE rn = 1 AND symbol = lh.symbol AND company = lh.company) AS holding_difference,
-    s.nsesymbol, s.bsecode, s._id, s.marketcapitalization, s.closeprice, s.industry, s.sector, s.pricetoearnings, s.pricetosales, s.revenuegrowthttm, s.patgrowthttm, s.patgrowthqoq, s.pricetobookvalue, s.returns1w, s.returns1m, s.returns3m, s.returns6m, s.strengthvsnifty500monthly, s.sma20d, s.evtoebitda, s.fixedassets3yearsback, s.fiftytwowhdistance, s.fiftytwowl, s.strengthvsnifty500weekly, s.debttoequity, s.debttoequity3yearsback, s.changeindiiholdings1year, s.changeinfiiholdings1year, s.promoterholdings, s.changeinpromoterholdings1year, s.roce, s.pbtgrowthttm, s.fixedassetslatestyear,
-    TO_CHAR(MAX(t.acquisitiondatefrom), 'DD-MM-YYYY') AS latest_acquisition_date
+    ts.categoryOfPerson,
+    ts.symbol,
+    ts.company,
+    TO_CHAR(ts.acquisitionDateFrom, 'DD-MM-YYYY') AS latest_acquisitiondatefrom,
+    ts.latest_shareholdingPrior,
+    ts.latest_shareholdingPost,
+    (ts.latest_shareholdingPost - ts.latest_shareholdingPrior) AS shareholding_difference,
+    ts.total_num_of_security_acquired_disposed,
+    ts.total_value_of_security_acquired_disposed,
+    sd.nseSymbol,
+    sd.bseCode,
+    sd.marketCapitalization,
+    sd.closePrice,
+    sd.industry,
+    sd.sector,
+    sd.priceToEarnings,
+    sd.priceToSales,
+    sd.revenueGrowthTtm,
+    sd.patGrowthTtm,
+    sd.patGrowthQoq,
+    sd.priceToBookValue,
+    sd.returns1W,
+    sd.returns1M,
+    sd.returns3M,
+    sd.returns6M,
+    sd.strengthVsNifty500Monthly,
+    sd.sma20D,
+    sd.evToEbitda,
+    sd.fixedAssets3YearsBack,
+    sd.fiftyTwoWhDistance,
+    sd.fiftyTwoWl,
+    sd.strengthVsNifty500Weekly,
+    sd.debtToEquity,
+    sd.debtToEquity3YearsBack,
+    sd.changeInDiiHoldings1Year,
+    sd.changeInFiiHoldings1Year,
+    sd.promoterHoldings,
+    sd.changeInPromoterHoldings1Year,
+    sd.roce,
+    sd.pbtGrowthTtm,
+    sd.fixedAssetsLatestYear
 FROM 
-    transactions t
-JOIN 
-    LatestHoldings lh ON t.symbol = lh.symbol AND t.company = lh.company
-JOIN 
-    stockdata s ON t.symbol = s.nsesymbol
+    LatestShareholding ts
+LEFT JOIN 
+    stockdata sd ON ts.symbol = sd.nseSymbol
 WHERE 
-    t.acquisitiondatefrom BETWEEN ${from} AND ${to}
-    AND t.categoryofperson IN ('Director', 'Promoter Group', 'Promoters')
-    AND t.securitytypeprior IN ('Equity Shares', 'Warrent')
-    AND t.transactiontype = 'Buy'
-GROUP BY 
-    lh.symbol, lh.company, 
-    s.nsesymbol, s.bsecode, s._id, s.marketcapitalization, s.closeprice, s.industry, s.sector, s.pricetoearnings, s.pricetosales, s.revenuegrowthttm, s.patgrowthttm, s.patgrowthqoq, s.pricetobookvalue, s.returns1w, s.returns1m, s.returns3m, s.returns6m, s.strengthvsnifty500monthly, s.sma20d, s.evtoebitda, s.fixedassets3yearsback, s.fiftytwowhdistance, s.fiftytwowl, s.strengthvsnifty500weekly, s.debttoequity, s.debttoequity3yearsback, s.changeindiiholdings1year, s.changeinfiiholdings1year, s.promoterholdings, s.changeinpromoterholdings1year, s.roce, s.pbtgrowthttm, s.fixedassetslatestyear
+    ts.rn = 1
 ORDER BY 
-    latest_acquisition_date DESC;
-
-
+    ts.acquisitionDateFrom ASC;
 `;
 const namecombined = (from, to) => (0, config_1.default) `WITH LatestHoldings AS (
     SELECT 
@@ -161,7 +234,6 @@ router.post('/namewise', (req, res) => __awaiter(void 0, void 0, void 0, functio
     let { amountfrom, amountto, from, to, securitytype = null, modeofacquisition = null, transactiontype = null } = req.body;
     console.log(from, to);
     if (!from && !to) {
-        console.log("executed");
         from = "2024-08-11";
         to = "2024-09-11";
     }
@@ -182,7 +254,6 @@ router.post('/namecombined', (req, res) => __awaiter(void 0, void 0, void 0, fun
     let { amountfrom, amountto, from, to, securitytype = null, modeofacquisition = null, transactiontype = null } = req.body;
     console.log(from, to);
     if (!from && !to) {
-        console.log("executed");
         from = "2024-08-11";
         to = "2024-09-11";
     }
@@ -203,18 +274,20 @@ router.post('/companywise', (req, res) => __awaiter(void 0, void 0, void 0, func
     let { amountfrom, amountto, from, to, securitytype = null, modeofacquisition = null, transactiontype = null } = req.body;
     console.log(from, to);
     if (!from && !to) {
-        console.log("executed");
-        from = "2024-08-11";
-        to = "2024-09-11";
+        from = "2024-09-23";
+        to = "2024-10-23";
     }
     // Check if 'from' and 'to' are of correct type
     if (typeof from !== 'string' || typeof to !== 'string') {
         return res.status(400).json({ error: 'Invalid or missing "from" or "to" query parameters' });
     }
     try {
+        console.log(from, to);
         const data = yield companywise(from, to);
-        console.log(data.slice(0, 1));
-        res.json(data);
+        res.json({
+            between: [from, to],
+            data: data
+        });
     }
     catch (error) {
         console.log(error);
@@ -279,7 +352,6 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 router.get('/stock', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const data = yield (0, config_1.default) `select * from stockdata limit 10;`;
-        console.log(data);
         res.json(data);
     }
     catch (error) {

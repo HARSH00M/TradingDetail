@@ -159,7 +159,7 @@ router.post('/ifupload',upload(), async (req : Request, res)=>{
     });
 
   }catch(err){
-    console.log(err.message);
+    console.log("error : ", err.message);
     console.log(err);
     res.json({
       error : err,

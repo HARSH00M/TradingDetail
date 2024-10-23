@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ProcessInsertionDatabase;
 const config_1 = __importDefault(require("../config"));
-const date_fns_1 = require("date-fns"); // Import date-fns for date parsing
+const date_fns_1 = require("date-fns");
 const replaceNullsWithZero = (data) => {
     return Object.fromEntries(Object.entries(data).map(([key, value]) => [key, value === null || value === 'null' || value === 'nil' || value === 'Nil' || value === '-' ? null : value]));
 };
@@ -24,7 +24,7 @@ const parseDate = (dateString) => {
         return null; // Return null if the input is '-'
     }
     // Updated formats to include only the desired formats
-    const formats = ['dd-MM-yyyy', 'dd-MMM-yy',];
+    const formats = ['dd-MM-yyyy', 'dd-MMM-yy', 'dd-MMM-yyyy'];
     // Attempt to parse the date string using the defined formats
     for (const formatString of formats) {
         const parsedDate = (0, date_fns_1.parse)(dateString, formatString, new Date());
@@ -44,6 +44,7 @@ function ProcessInsertionDatabase(stockDataArray) {
             yield config_1.default.begin((transaction) => __awaiter(this, void 0, void 0, function* () {
                 for (const stockData of stockDataArray) {
                     const sanitizedData = replaceNullsWithZero(stockData);
+                    console.log(stockData);
                     // Skip if symbol is null
                     if (!sanitizedData.symbol) {
                         console.log(`Skipped insertion for stock data due to null symbol: ${JSON.stringify(sanitizedData)}`);
@@ -60,7 +61,7 @@ function ProcessInsertionDatabase(stockDataArray) {
                     // Insert the data into the database with the parsed dates
                     yield transaction `INSERT INTO transactions (
                     symbol, company, regulation, acquirerDisposer, categoryOfPerson, securityTypePrior, 
-                    numOfSecurityPrior, shareholdingPrior, securityTypeAcquiredDisposed, 
+                    numOfSecurityPrior, shareholdingPrior,
                     numOfSecurityAcquiredDisposed, valueOfSecurityAcquiredDisposed, transactionType, 
                     securityTypePost, numOfSecurityPost, shareholdingPost, acquisitionDateFrom, 
                     acquisitionDateTo, intimationDate, modeOfAcquisition, derivativeTypeSecurity, 
@@ -71,7 +72,7 @@ function ProcessInsertionDatabase(stockDataArray) {
                     ${sanitizedData.symbol}, ${sanitizedData.company}, ${sanitizedData.regulation}, 
                     ${sanitizedData.acquirerDisposer}, ${sanitizedData.categoryOfPerson}, 
                     ${sanitizedData.securityTypePrior}, ${sanitizedData.numOfSecurityPrior}, 
-                    ${sanitizedData.shareholdingPrior}, ${sanitizedData.securityTypeAcquiredDisposed}, 
+                    ${sanitizedData.shareholdingPrior}, 
                     ${sanitizedData.numOfSecurityAcquiredDisposed}, ${sanitizedData.valueOfSecurityAcquiredDisposed}, 
                     ${sanitizedData.transactionType}, ${sanitizedData.securityTypePost}, 
                     ${sanitizedData.numOfSecurityPost}, ${sanitizedData.shareholdingPost}, 
@@ -89,7 +90,6 @@ function ProcessInsertionDatabase(stockDataArray) {
         }
         catch (err) {
             console.error('Error during database insertion:', err);
-            console.log(err.message);
             throw new Error(err); // Rethrow error to handle it at a higher level
         }
         finally {

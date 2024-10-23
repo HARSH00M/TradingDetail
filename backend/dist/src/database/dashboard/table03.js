@@ -21,7 +21,7 @@ function MaximumNumbersOfTransactionsCompanyWise() {
         SUM(CAST(valueofsecurityacquireddisposed AS numeric)) AS total_value
  FROM transactions GROUP BY Symbol 
  HAVING SUM(CAST(valueofsecurityacquireddisposed AS numeric)) > 0
- ORDER BY total_value DESC;
+ ORDER BY total_value DESC LIMIT 20;
  
  `;
             return result;

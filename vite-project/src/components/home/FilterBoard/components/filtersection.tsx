@@ -43,7 +43,7 @@ export default function FilterSection({
   }
 
   return (
-    <div className="md:px-14 flex flex-col justify-center items-center w-5/6">
+    <div className="md:px-14 flex flex-col justify-center items-center w-full">
       <div className="flex w-full md:py-8 ">
         <h1 className="mx-auto text-xl md:text-3xl text-gray-700 font-semibold">
           Recent Transactions Happened

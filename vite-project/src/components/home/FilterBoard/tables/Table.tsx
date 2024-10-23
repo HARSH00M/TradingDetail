@@ -11,8 +11,11 @@ type DataType = {
   bsecode: string;
   changeindiiholdings1year: string;
   changeinfiiholdings1year: string;
+  latest_acquisitiondatefrom : string;
+  latest_shareholdingprior  : string;
+  latest_shareholdingpost : string;
+  shareholding_difference : string;
   changeinpromoterholdings1year: string;
-  latest_acquisition_date:string;
   closeprice: string;
   company: string;
   debttoequity: string;
@@ -22,7 +25,6 @@ type DataType = {
   fiftytwowl: string;
   fixedassets3yearsback: string;
   fixedassetslatestyear: string;
-  holding_difference: string;
   industry: string;
   marketcapitalization: string;
   nsesymbol: string;
@@ -44,12 +46,11 @@ type DataType = {
   strengthvsnifty500monthly: string;
   strengthvsnifty500weekly: string;
   symbol: string;
-  total_shareholdingpost: string;
-  total_shareholdingprior: string;
-  totalnumofsecurity: string;
-  totalvalueofsecurity: string;
+  total_num_of_security_acquired_disposed: string,
+  total_value_of_security_acquired_disposed: string,
   _id: string;
 };
+
 
 
 
@@ -69,29 +70,50 @@ const Table = ({ data }: { data: DataType[] }) => {
           header: 'Symbol',
       },
       {
-          accessorKey: 'promoterholdings',
-          header: 'Promoter Holdings (%)',
-      },
-      {
-          accessorKey: 'latest_acquisition_date',
+          accessorKey: 'latest_acquisitiondatefrom',
           header: 'Last Acquisition Date',
       },
       {
-          accessorKey: 'total_shareholdingprior',
+          accessorKey: 'latest_shareholdingprior',
           header: 'Shareholding Prior (%)',
       },
       {
-          accessorKey: 'total_shareholdingpost',
+          accessorKey: 'latest_shareholdingpost',
           header: 'Shareholding Post (%)',
       },
       {
-          accessorKey: 'totalnumofsecurity',
-          header: 'No. of Securities Acquired/Disposed',
+          accessorKey: 'shareholding_difference',
+          header: 'Added Shareholding(%)',
+      },
+      
+      {
+          accessorKey: 'total_num_of_security_acquired_disposed',
+          header: 'No. of Securities Acquired',
       },
       {
-          accessorKey: 'totalvalueofsecurity',
-          header: 'Value of Securities Acquired/Disposed (Rs.)',
+          accessorKey: 'total_value_of_security_acquired_disposed',
+          header: 'Value of Securities Acquired(Rs.)',
       },
+      {
+        accessorKey: 'promoterholdings',
+        header: 'Promoter Holdings (%)',
+        },
+    {
+        accessorKey: 'marketcapitalization',
+        header: 'Market Capitalization',
+    },
+    {
+        accessorKey: 'industry',
+        header: 'Industry',
+    },
+    {
+        accessorKey: 'pricetoearnings',
+        header: 'Price to Earnings',
+    },
+    {
+        accessorKey: 'pricetobookvalue',
+        header: 'Price to Book Value',
+    },
       {
           accessorKey: 'strengthvsnifty500monthly',
           header: 'Strength vs Nifty500 (Monthly)',
@@ -104,22 +126,8 @@ const Table = ({ data }: { data: DataType[] }) => {
           accessorKey: 'debttoequity',
           header: 'Debt to Equity',
       },
-      {
-          accessorKey: 'industry',
-          header: 'Industry',
-      },
-      {
-          accessorKey: 'marketcapitalization',
-          header: 'Market Capitalization',
-      },
-      {
-          accessorKey: 'pricetoearnings',
-          header: 'Price to Earnings',
-      },
-      {
-          accessorKey: 'pricetobookvalue',
-          header: 'Price to Book Value',
-      },
+
+      
       {
           accessorKey: 'roce',
           header: 'Return on Capital Employed (%)',
@@ -240,16 +248,7 @@ const Table = ({ data }: { data: DataType[] }) => {
           >
             Export All Data
           </Button>
-          <Button
-            disabled={table.getPrePaginationRowModel().rows.length === 0}
-            //export all rows, including from the next page, (still respects filtering and sorting)
-            onClick={() =>
-              handleExportRows(table.getPrePaginationRowModel().rows)
-            }
-            startIcon={<FileDownloadIcon />}
-          >
-            Export All Rows
-          </Button>
+          
           <Button
             disabled={table.getRowModel().rows.length === 0}
             //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)

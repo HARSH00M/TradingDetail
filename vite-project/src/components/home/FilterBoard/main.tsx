@@ -34,12 +34,14 @@ export default function FilterBoard() {
   // });
   
 
-  const {data : tabledata, isFetching, refetch} = useQuery({
+  const {data : tabledata, isFetched, refetch} = useQuery({
     queryKey : ['table'], 
     queryFn : () => applyfilter({from : state.fromdate, to : state.todate, securitytype : state.securitytype, modeofacquisition : state.modeofacquisition, transactiontype : state.transactiontype}),
     enabled : false,
   })
 
+  if(tabledata)
+  console.log(tabledata)
 
   useEffect(()=>{
     refetch()
@@ -61,6 +63,8 @@ export default function FilterBoard() {
     refetch()
   }
 
+  
+
 
 
   return (
@@ -68,11 +72,14 @@ export default function FilterBoard() {
 
       {/* <FilterSection apply={apply} reset={reset} filterstate={state} setState={setState} data={data}/> */}
       <FilterSection apply={apply} reset={reset}  setState={setState} />
-
+      
+      
+      <div className="flex w-full justify-center text-lg font-bold text-gray-600">{tabledata?.between ? <div> from {tabledata.between[0]} to {tabledata.between[1]}</div> : null}</div>
+    
 
      <div className="overflow-clip w-96 md:w-full md:overflow-x-auto md:min-w-screen  md:max-w-screen-lg">
-     {tabledata ? 
-      <Table data={tabledata}/> : isFetching ? <Spinner/> : null
+     {tabledata?.data ? 
+      <Table data={tabledata?.data}/> : isFetched ? <Spinner/> : null
      }
      </div>
       

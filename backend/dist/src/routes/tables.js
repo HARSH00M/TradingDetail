@@ -139,7 +139,7 @@ exports.router.post('/ifupload', (0, main_1.default)(), (req, res) => __awaiter(
         });
     }
     catch (err) {
-        console.log(err.message);
+        console.log("error : ", err.message);
         console.log(err);
         res.json({
             error: err,

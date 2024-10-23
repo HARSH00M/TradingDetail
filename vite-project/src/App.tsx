@@ -34,6 +34,7 @@ const App: React.FC = () => {
       </Routes>
       {/* </AuthProvider> */}
     </BrowserRouter>
+    
   );
 };
 

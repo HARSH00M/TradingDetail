@@ -1,8 +1,8 @@
 import sql from '../config';
-import { parse, isValid, format } from 'date-fns'; // Import date-fns for date parsing
+import { parse, isValid, format } from 'date-fns'; 
 
 interface StockData {
-    [key: string]: any; // You can refine this type further based on expected data structure
+    [key: string]: any; 
 }
 
 const replaceNullsWithZero = (data: StockData): StockData => {
@@ -17,9 +17,8 @@ const parseDate = (dateString: string): string | null => {
     if (dateString === '-' || dateString === null) {
         return null; // Return null if the input is '-'
     }
-
     // Updated formats to include only the desired formats
-    const formats = ['dd-MM-yyyy', 'dd-MMM-yy',];
+    const formats = ['dd-MM-yyyy', 'dd-MMM-yy', 'dd-MMM-yyyy'];
 
     // Attempt to parse the date string using the defined formats
     for (const formatString of formats) {
@@ -43,7 +42,7 @@ export default async function ProcessInsertionDatabase(stockDataArray: StockData
         await sql.begin(async (transaction: any) => {
             for (const stockData of stockDataArray) {
                 const sanitizedData = replaceNullsWithZero(stockData);
-
+                console.log(stockData)
                 // Skip if symbol is null
                 if (!sanitizedData.symbol) {
                     console.log(`Skipped insertion for stock data due to null symbol: ${JSON.stringify(sanitizedData)}`);
@@ -60,10 +59,11 @@ export default async function ProcessInsertionDatabase(stockDataArray: StockData
                 const acquisitionDateTo = parseDate(sanitizedData.acquisitionDateTo);
                 const intimationDate = parseDate(sanitizedData.intimationDate);
 
+                
                 // Insert the data into the database with the parsed dates
                 await transaction`INSERT INTO transactions (
                     symbol, company, regulation, acquirerDisposer, categoryOfPerson, securityTypePrior, 
-                    numOfSecurityPrior, shareholdingPrior, securityTypeAcquiredDisposed, 
+                    numOfSecurityPrior, shareholdingPrior,
                     numOfSecurityAcquiredDisposed, valueOfSecurityAcquiredDisposed, transactionType, 
                     securityTypePost, numOfSecurityPost, shareholdingPost, acquisitionDateFrom, 
                     acquisitionDateTo, intimationDate, modeOfAcquisition, derivativeTypeSecurity, 
@@ -74,7 +74,7 @@ export default async function ProcessInsertionDatabase(stockDataArray: StockData
                     ${sanitizedData.symbol}, ${sanitizedData.company}, ${sanitizedData.regulation}, 
                     ${sanitizedData.acquirerDisposer}, ${sanitizedData.categoryOfPerson}, 
                     ${sanitizedData.securityTypePrior}, ${sanitizedData.numOfSecurityPrior}, 
-                    ${sanitizedData.shareholdingPrior}, ${sanitizedData.securityTypeAcquiredDisposed}, 
+                    ${sanitizedData.shareholdingPrior}, 
                     ${sanitizedData.numOfSecurityAcquiredDisposed}, ${sanitizedData.valueOfSecurityAcquiredDisposed}, 
                     ${sanitizedData.transactionType}, ${sanitizedData.securityTypePost}, 
                     ${sanitizedData.numOfSecurityPost}, ${sanitizedData.shareholdingPost}, 
@@ -92,7 +92,6 @@ export default async function ProcessInsertionDatabase(stockDataArray: StockData
         console.log('All data inserted successfully');
     } catch (err) {
         console.error('Error during database insertion:', err);
-        console.log(err.message);
         throw new Error(err); // Rethrow error to handle it at a higher level
     } finally {
         await sql.end(); // Ensure the connection is closed
