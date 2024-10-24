@@ -8,8 +8,8 @@ import  processfilename  from "../MulterCsvHandeling/ProcessFileAddress";
 import CreateStockDataDatabase from "../database/CreateStockDataDatabase";
 import sql from '../database/config'
 import { PerformTransactionUpdation } from "../database/TransactionUpdation";
-import CreateTransactionsDatabase from "../database/insidertrading/CreateInsiderTradingDatabase";
-import ProcessInsertionDatabase from "../database/insidertrading/ProcessInsertion";
+import CreateTransactionsDatabase from "../database/insider/CreateInsiderTradingDatabase";
+import ProcessInsertionDatabase from "../database/insider/ProcessInsertion";
 import { processCsvforTF } from "../MulterCsvHandeling/csvfile2";
 
 type CsvData = {
