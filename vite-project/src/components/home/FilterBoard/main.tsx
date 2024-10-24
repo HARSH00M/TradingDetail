@@ -5,6 +5,7 @@ import FilterSection from "./components/filtersection";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../../spinner";
 import Table from './tables/Table'
+import toast from "react-hot-toast";
 
 
 
@@ -40,12 +41,20 @@ export default function FilterBoard() {
     enabled : false,
   })
 
-  if(tabledata)
-  console.log(tabledata)
+ 
 
-  useEffect(()=>{
-    refetch()
-  }, [])
+  useEffect(() => {
+    if (
+      state.fromdate === null &&
+      state.todate === null &&
+      state.securitytype === null &&
+      state.modeofacquisition === null &&
+      state.transactiontype === null
+    ) {
+      // Call refetch after the state has been fully reset
+      refetch();
+    }
+  }, [state]); 
 
  
   function reset(){
@@ -56,7 +65,11 @@ export default function FilterBoard() {
     modeofacquisition: null,
     transactiontype:  null
     })
-    refetch();
+
+    toast.success("filter reset", { position : 'bottom-right', iconTheme : {
+      primary: '#000',
+      secondary: '#fff',
+    } })
 
   }
   function apply(){

@@ -66,7 +66,7 @@ export const applyfilter = async (params : filterparameters ) => {
 
     // Check if both `from` and `to` are non-empty strings
     
-    const response = await fetch(url, {
+    const promise = fetch(url, {
       method : "POST",
       headers : {
         'Content-Type' : 'application/json'
@@ -74,6 +74,13 @@ export const applyfilter = async (params : filterparameters ) => {
       body : JSON.stringify(params),
     });
 
+    const response  = await toast.promise(promise,
+      {
+        loading: 'loading...',
+        success: 'Data fetched successfully!',
+        error: 'Failed to fetch!',
+      },)
+    
     
     // Check if the response is ok (status is 200-299)
     if (!response.ok) {
