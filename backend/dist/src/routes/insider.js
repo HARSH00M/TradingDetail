@@ -129,7 +129,7 @@ WITH LatestShareholding AS (
     FROM 
         transactions
     WHERE 
-        categoryOfPerson IN ('Director', 'Promoters', 'Promoter group') AND
+        categoryOfPerson IN ('Director', 'Promoters', 'Promoter Group') AND
         transactionType = 'Buy' 
         AND acquisitionDateFrom BETWEEN ${from} AND ${to}
 )

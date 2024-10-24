@@ -73,6 +73,7 @@ export const applyfilter = async (params : filterparameters ) => {
       },
       body : JSON.stringify(params),
     });
+
     
     // Check if the response is ok (status is 200-299)
     if (!response.ok) {
@@ -81,8 +82,11 @@ export const applyfilter = async (params : filterparameters ) => {
     }
     
     // Parse the JSON data
-    toast.success("Fetched")
     const data = await response.json();
+
+    
+    
+   
     return data;
   } catch (error) {
     console.error("Error fetching companies:", error);
