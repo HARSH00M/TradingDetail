@@ -54,8 +54,8 @@ const CompanyApexChart = () => {
   const formattedSeries = [{ name : "transactions", data: series.slice(0,7) }];
 
   // Check if the data is valid
-  const isSeriesValid = Array.isArray(formattedSeries) && formattedSeries.length > 0 && formattedSeries[0].data.length > 0;
-  const isCategoriesValid = Array.isArray(categories) && categories.length > 0;
+  const isSeriesValid = Array.isArray(formattedSeries) && formattedSeries?.length > 0 && formattedSeries[0].data?.length > 0;
+  const isCategoriesValid = Array.isArray(categories) && categories?.length > 0;
 
   // If both series and categories are valid, render the chart
   return (

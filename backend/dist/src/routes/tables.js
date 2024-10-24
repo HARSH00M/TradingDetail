@@ -23,8 +23,8 @@ const ProcessFileAddress_1 = __importDefault(require("../MulterCsvHandeling/Proc
 const CreateStockDataDatabase_1 = __importDefault(require("../database/CreateStockDataDatabase"));
 const config_1 = __importDefault(require("../database/config"));
 const TransactionUpdation_1 = require("../database/TransactionUpdation");
-const CreateInsiderTradingDatabase_1 = __importDefault(require("../database/InsiderTrading/CreateInsiderTradingDatabase"));
-const ProcessInsertion_1 = __importDefault(require("../database/InsiderTrading/ProcessInsertion"));
+const CreateInsiderTradingDatabase_1 = __importDefault(require("../database/insider/CreateInsiderTradingDatabase"));
+const ProcessInsertion_1 = __importDefault(require("../database/insider/ProcessInsertion"));
 const csvfile2_1 = require("../MulterCsvHandeling/csvfile2");
 exports.router = (0, express_1.Router)();
 const fields = [
@@ -139,7 +139,7 @@ exports.router.post('/ifupload', (0, main_1.default)(), (req, res) => __awaiter(
         });
     }
     catch (err) {
-        console.log(err.message);
+        console.log("error : ", err.message);
         console.log(err);
         res.json({
             error: err,

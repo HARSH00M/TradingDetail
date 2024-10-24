@@ -17,7 +17,7 @@ export async function PerformTransactionUpdation() {
         if(data)
         console.log("Updated transactions table with industry and sector");
 
-        return data
+        return data;
         
     }catch(err){
         throw new Error(err.message)

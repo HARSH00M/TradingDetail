@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 type filterparameters = {
   from : string | null,
   to : string | null, 
@@ -64,22 +66,34 @@ export const applyfilter = async (params : filterparameters ) => {
 
     // Check if both `from` and `to` are non-empty strings
     
-    const response = await fetch(url, {
+    const promise = fetch(url, {
       method : "POST",
       headers : {
         'Content-Type' : 'application/json'
       },
       body : JSON.stringify(params),
     });
+
+    const response  = await toast.promise(promise,
+      {
+        loading: 'loading...',
+        success: 'Data fetched successfully!',
+        error: 'Failed to fetch!',
+      },)
+    
     
     // Check if the response is ok (status is 200-299)
     if (!response.ok) {
+      toast.error("Error in Fetching", {position : 'bottom-center', duration : 4000});
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
     
     // Parse the JSON data
     const data = await response.json();
-    console.log(data)
+
+    
+    
+   
     return data;
   } catch (error) {
     console.error("Error fetching companies:", error);

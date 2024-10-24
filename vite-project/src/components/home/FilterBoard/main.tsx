@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
-import { applyfilter, filtervalues } from "../../../services/dashboard";
+import { applyfilter} from "../../../services/dashboard";
+// import { applyfilter, filtervalues } from "../../../services/dashboard";
 import FilterSection from "./components/filtersection";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../../spinner";
 import Table from './tables/Table'
+import toast from "react-hot-toast";
 
 
 
@@ -25,24 +27,34 @@ export default function FilterBoard() {
     transactiontype:  null
   })
 
-  const { data } = useQuery({
-    queryKey: ['filtervalues'],
-    queryFn: () => filtervalues(),
-    refetchOnWindowFocus : false,
-    refetchOnMount : false
-  });
+  // const { data } = useQuery({
+  //   queryKey: ['filtervalues'],
+  //   queryFn: () => filtervalues(),
+  //   refetchOnWindowFocus : false,
+  //   refetchOnMount : false
+  // });
   
 
-  const {data : tabledata, isFetching, refetch} = useQuery({
+  const {data : tabledata, isFetched, refetch} = useQuery({
     queryKey : ['table'], 
     queryFn : () => applyfilter({from : state.fromdate, to : state.todate, securitytype : state.securitytype, modeofacquisition : state.modeofacquisition, transactiontype : state.transactiontype}),
     enabled : false,
   })
 
+ 
 
-  useEffect(()=>{
-    refetch()
-  }, [])
+  useEffect(() => {
+    if (
+      state.fromdate === null &&
+      state.todate === null &&
+      state.securitytype === null &&
+      state.modeofacquisition === null &&
+      state.transactiontype === null
+    ) {
+      // Call refetch after the state has been fully reset
+      refetch();
+    }
+  }, [state]); 
 
  
   function reset(){
@@ -53,24 +65,34 @@ export default function FilterBoard() {
     modeofacquisition: null,
     transactiontype:  null
     })
-    refetch();
+
+    toast.success("filter reset", { position : 'bottom-right', iconTheme : {
+      primary: '#000',
+      secondary: '#fff',
+    } })
 
   }
   function apply(){
     refetch()
   }
 
+  
+
 
 
   return (
     <div className="md:min-h-screen shadow-md shadow-black/30 flex flex-col items-center justify-center w-full">
 
-      <FilterSection apply={apply} reset={reset} filterstate={state} setState={setState} data={data}/>
-
+      {/* <FilterSection apply={apply} reset={reset} filterstate={state} setState={setState} data={data}/> */}
+      <FilterSection apply={apply} reset={reset}  setState={setState} />
+      
+      
+      <div className="flex w-full justify-center text-lg font-bold text-gray-600">{tabledata?.between ? <div> from {tabledata.between[0]} to {tabledata.between[1]}</div> : null}</div>
+    
 
      <div className="overflow-clip w-96 md:w-full md:overflow-x-auto md:min-w-screen  md:max-w-screen-lg">
-     {tabledata ? 
-      <Table data={tabledata}/> : isFetching ? <Spinner/> : null
+     {tabledata?.data ? 
+      <Table data={tabledata?.data}/> : isFetched ? <Spinner/> : null
      }
      </div>
       
