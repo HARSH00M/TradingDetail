@@ -130,8 +130,10 @@ WITH LatestShareholding AS (
         transactions
     WHERE 
         categoryOfPerson IN ('Director', 'Promoters', 'Promoter Group') AND
+        modeofacquisition IN ('Market Sale', 'Off Market', 'Preferential Offer', 'Market Sale') AND
         transactionType = 'Buy' 
         AND acquisitionDateFrom BETWEEN ${from} AND ${to}
+
 )
 
 SELECT 
