@@ -133,7 +133,6 @@ WITH LatestShareholding AS (
         modeofacquisition IN ('Market Sale', 'Off Market', 'Preferential Offer', 'Market Sale') AND
         transactionType = 'Buy' 
         AND acquisitionDateFrom BETWEEN ${from} AND ${to}
-
 )
 
 SELECT 

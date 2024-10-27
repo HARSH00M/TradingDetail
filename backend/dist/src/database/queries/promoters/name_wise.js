@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.named_wise = exports.name = void 0;
-const dbConnection_1 = __importDefault(require("../../../../config/dbConnection"));
+const config_1 = __importDefault(require("../../config"));
 exports.name = "harsh";
 const named_wise = (from, to) => {
-    return (0, dbConnection_1.default) `WITH LatestHoldings AS (
+    return (0, config_1.default) `WITH LatestHoldings AS (
     SELECT 
         acquirerdisposer,
         symbol,

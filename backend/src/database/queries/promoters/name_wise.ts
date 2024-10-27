@@ -1,4 +1,4 @@
-import sql from "../../../../config/dbConnection"
+import sql from '../../config'
 
 export const name = "harsh"
 
