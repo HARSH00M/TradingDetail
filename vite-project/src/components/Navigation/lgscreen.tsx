@@ -22,14 +22,9 @@ export default function Lgscreen() {
                         Companies
                     </Link>
                 </li>
-                {/* <li className="block p-1 font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
+                <li className="block p-1 font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
                     <Link to="/about" className="flex items-center">
                         About Us
-                    </Link>
-                </li> */}
-                <li className="block p-1 font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                    <Link to="/upload" className="flex items-center">
-                        Upload CSV
                     </Link>
                 </li>
             </ul>
