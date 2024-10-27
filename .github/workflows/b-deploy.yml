@@ -24,7 +24,7 @@ jobs:
 
       - name: Generate Deployment Package
         working-directory: ./backend      
-        run: zip -r nodejs-app-build.zip . -i ./backend
+        run: zip -r nodejs-app-build.zip ./backend
       
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v22
