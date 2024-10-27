@@ -24,8 +24,8 @@ jobs:
 
       - name: Generate Deployment Package
         working-directory: ./backend      
-        run: zip -r nodejs-app-build.zip ./backend
-      
+        run: zip -r nodejs-app-build.zip .
+
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v22
         with:
@@ -35,6 +35,4 @@ jobs:
           environment_name: 'Filytics-env'
           version_label: ${{github.sha}}
           region: ap-south-1
-          deployment_package: nodejs-app-build.zip
-
-    
+          deployment_package: ./backend/nodejs-app-build.zip
