@@ -39,6 +39,8 @@ export default function FilterBoard() {
     queryKey : ['table'], 
     queryFn : () => applyfilter({from : state.fromdate, to : state.todate, securitytype : state.securitytype, modeofacquisition : state.modeofacquisition, transactiontype : state.transactiontype}),
     enabled : false,
+    refetchOnWindowFocus : false,
+    refetchOnMount : false
   })
 
  
@@ -66,10 +68,10 @@ export default function FilterBoard() {
     transactiontype:  null
     })
 
-    toast.success("filter reset", { position : 'bottom-right', iconTheme : {
-      primary: '#000',
-      secondary: '#fff',
-    } })
+    // toast.success("filter reset", { position : 'bottom-right', iconTheme : {
+    //   primary: '#000',
+    //   secondary: '#fff',
+    // } })
 
   }
   function apply(){
