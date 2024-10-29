@@ -4,31 +4,28 @@ import 'flatpickr/dist/flatpickr.min.css';
 
 interface DatePickerProps {
   statename: string;
-  setState: React.Dispatch<React.SetStateAction<any>>; // Correct type for setState
+  setState: React.Dispatch<React.SetStateAction<any>>;
+  value: string | null;  // New prop for controlled value
 }
 
-const DatePicker: React.FC<DatePickerProps> = ({ statename, setState }) => {
-  const datePickerRef = useRef<HTMLInputElement | null>(null); // Define the ref with the correct type
+const DatePicker: React.FC<DatePickerProps> = ({ statename, setState, value }) => {
+  const datePickerRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (datePickerRef.current) {
       const datepicker = flatpickr(datePickerRef.current, {
-        dateFormat: 'd-m-Y', // Set date format to dd-MM-yyyy
+        dateFormat: 'd-m-Y',
+        defaultDate: value || null,  // Set initial date or clear if null
         onChange: (selectedDates) => {
-          // Get the selected date in the specified format
           const selectedDate = selectedDates.length > 0 ? flatpickr.formatDate(selectedDates[0], 'd-m-Y') : null;
-          
-          // Get the selected date
-          
-          // Update state with the selected date using statename as the key
           setState((prevState: any) => ({
             ...prevState,
-            [statename]: selectedDate, // Assign the selected date to the statename key
+            [statename]: selectedDate,
           }));
         },
       });
 
-      // Styling the date picker
+      // Styling adjustments for the calendar
       const calendarContainer = datepicker.calendarContainer;
       const calendarMonthNav = datepicker.monthNav;
       const calendarNextMonthNav = datepicker.nextMonthNav;
@@ -38,19 +35,15 @@ const DatePicker: React.FC<DatePickerProps> = ({ statename, setState }) => {
       if (calendarContainer) {
         calendarContainer.className = `${calendarContainer.className} bg-white p-4 border border-blue-gray-50 rounded-lg shadow-lg shadow-blue-gray-500/10 font-sans text-sm font-normal text-blue-gray-500 focus:outline-none break-words whitespace-normal`;
       }
-
       if (calendarMonthNav) {
         calendarMonthNav.className = `${calendarMonthNav.className} flex items-center justify-between mb-4 [&>div.flatpickr-month]:-translate-y-3`;
       }
-
       if (calendarNextMonthNav) {
         calendarNextMonthNav.className = `${calendarNextMonthNav.className} absolute !top-2.5 !right-1.5 h-6 w-6 bg-transparent hover:bg-blue-gray-50 !p-1 rounded-md transition-colors duration-300`;
       }
-
       if (calendarPrevMonthNav) {
         calendarPrevMonthNav.className = `${calendarPrevMonthNav.className} absolute !top-2.5 !left-1.5 h-6 w-6 bg-transparent hover:bg-blue-gray-50 !p-1 rounded-md transition-colors duration-300`;
       }
-
       if (calendarDaysContainer) {
         calendarDaysContainer.className = `${calendarDaysContainer.className} [&_span.flatpickr-day]:!rounded-md [&_span.flatpickr-day.selected]:!bg-gray-900 [&_span.flatpickr-day.selected]:!border-gray-900`;
       }
@@ -60,7 +53,14 @@ const DatePicker: React.FC<DatePickerProps> = ({ statename, setState }) => {
         datepicker.destroy();
       };
     }
-  }, [statename, setState]); // Ensure that changes to statename or setState trigger useEffect
+  }, [statename, setState, value]); // Adding value dependency to re-render when reset
+
+  // Update the input field whenever value changes to clear input if needed
+  useEffect(() => {
+    if (datePickerRef.current) {
+      datePickerRef.current.value = value || '';
+    }
+  }, [value]);
 
   return (
     <div className="relative min-w-[200px]">
