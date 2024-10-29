@@ -1,8 +1,10 @@
 import toast from "react-hot-toast";
 
 type filterparameters = {
-  from : string | null,
-  to : string | null, 
+  fromdate : string | null,
+  todate : string | null, 
+  fromamount : string | null,
+  toamount : string | null, 
   securitytype : string | null,
   modeofacquisition : string | null,
   transactiontype : string | null

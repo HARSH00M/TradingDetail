@@ -272,21 +272,22 @@ router.post('/namecombined', (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
 }));
 router.post('/companywise', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { amountfrom, amountto, from, to, securitytype = null, modeofacquisition = null, transactiontype = null } = req.body;
-    console.log(from, to);
-    if (!from && !to) {
-        from = "2024-09-23";
-        to = "2024-10-23";
+    let { fromamount, toamount, fromdate, todate, securitytype = null, modeofacquisition = null, transactiontype = null } = req.body;
+    console.log(fromdate, todate);
+    console.log(fromamount, toamount);
+    if (!fromdate && !todate) {
+        fromdate = "2024-09-23";
+        todate = "2024-10-23";
     }
     // Check if 'from' and 'to' are of correct type
-    if (typeof from !== 'string' || typeof to !== 'string') {
+    if (typeof fromdate !== 'string' || typeof todate !== 'string') {
         return res.status(400).json({ error: 'Invalid or missing "from" or "to" query parameters' });
     }
     try {
-        console.log(from, to);
-        const data = yield companywise(from, to);
+        console.log(fromdate, todate);
+        const data = yield companywise(fromdate, todate);
         res.json({
-            between: [from, to],
+            between: [fromdate, todate],
             data: data
         });
     }

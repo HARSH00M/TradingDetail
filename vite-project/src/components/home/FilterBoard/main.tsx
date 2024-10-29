@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { applyfilter} from "../../../services/dashboard";
 // import { applyfilter, filtervalues } from "../../../services/dashboard";
 import FilterSection from "./components/filtersection";
@@ -15,6 +15,7 @@ type StateProps = {
   securitytype: string | null,
   modeofacquisition: string | null,
   transactiontype: string | null
+
 }
 
 
@@ -37,7 +38,15 @@ export default function FilterBoard() {
 
   const {data : tabledata, isFetched, refetch} = useQuery({
     queryKey : ['table'], 
-    queryFn : () => applyfilter({from : state.fromdate, to : state.todate, securitytype : state.securitytype, modeofacquisition : state.modeofacquisition, transactiontype : state.transactiontype}),
+    queryFn : () => applyfilter({
+      fromdate : state.fromdate, 
+      todate : state.todate, 
+      securitytype : state.securitytype, 
+      modeofacquisition : state.modeofacquisition, 
+      transactiontype : state.transactiontype,
+      fromamount : fromAmountRef.current ? fromAmountRef.current.value : null,
+      toamount : toAmountRef.current ? toAmountRef.current.value : null,
+    }),
     enabled : false,
   })
 
@@ -71,12 +80,22 @@ export default function FilterBoard() {
       secondary: '#fff',
     } })
 
+    if(fromAmountRef.current)
+    fromAmountRef.current.value = '';
+    if(toAmountRef.current)
+    toAmountRef.current.value = '';
+  
+
   }
   function apply(){
     refetch()
   }
 
-  
+
+  const fromAmountRef = useRef<HTMLInputElement>(null);
+  const toAmountRef = useRef<HTMLInputElement>(null);
+
+    
 
 
 
@@ -86,7 +105,9 @@ export default function FilterBoard() {
       {/* <FilterSection apply={apply} reset={reset} filterstate={state} setState={setState} data={data}/> */}
       <FilterSection apply={apply} reset={reset}  setState={setState} />
       
-      
+      <input type="number" ref={fromAmountRef}/>
+      <input type="number" ref={toAmountRef}/>
+
       <div className="flex w-full justify-center text-lg font-bold text-gray-600">{tabledata?.between ? <div> from {tabledata.between[0]} to {tabledata.between[1]}</div> : null}</div>
     
 
