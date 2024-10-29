@@ -28,7 +28,6 @@ export const dashboard = async () => {
       
       // Parse the JSON data
       const data = await response.json();
-      console.log(data)
       return data;
     } catch (error) {
       console.error("Error fetching companies:", error);
@@ -52,7 +51,6 @@ export const filtervalues = async () => {
     
     // Parse the JSON data
     const data = await response.json();
-    console.log(data)
     return data;
   } catch (error) {
     console.error("Error fetching companies:", error);
@@ -93,10 +91,8 @@ export const applyfilter = async (params : filterparameters ) => {
     // Parse the JSON data
     const data = await response.json();
 
-    
-    
-   
     return data;
+    
   } catch (error) {
     console.error("Error fetching companies:", error);
     // You can return a default value or rethrow the error depending on your use case

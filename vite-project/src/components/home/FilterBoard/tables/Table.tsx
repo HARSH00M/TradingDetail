@@ -58,7 +58,6 @@ type DataType = {
 const Table = ({ data }: { data: DataType[] }) => {
   // Memoize columns to avoid unnecessary re-renders
 
-  console.log("data : ", data?.slice(0,1))
   const columns = useMemo<MRT_ColumnDef<DataType>[]>(
     () => [
       {

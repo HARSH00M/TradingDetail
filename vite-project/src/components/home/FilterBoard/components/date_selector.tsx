@@ -5,13 +5,14 @@ import 'flatpickr/dist/flatpickr.min.css';
 interface DatePickerProps {
   statename: string;
   setState: React.Dispatch<React.SetStateAction<any>>; // Correct type for setState
+  placeholder : string
 }
 
 export interface DatePickerRef {
   resetDate: () => void; // Expose a resetDate method
 }
 
-const DatePicker = forwardRef<DatePickerRef, DatePickerProps>(({ statename, setState }, ref) => {
+const DatePicker = forwardRef<DatePickerRef, DatePickerProps>(({ statename, setState, placeholder }, ref) => {
   const datePickerRef = useRef<HTMLInputElement | null>(null); // Define the ref with the correct type
 
   useEffect(() => {
@@ -82,12 +83,11 @@ const DatePicker = forwardRef<DatePickerRef, DatePickerProps>(({ statename, setS
       <input
         ref={datePickerRef}
         // id="date-picker"
-        className="peer h-full w-full rounded-[7px] border border-gray-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-gray-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-gray-gray-200 placeholder-shown:border-t-gray-gray-200  focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-gray-gray-50"
-        placeholder=" "
+        className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" 
+
+        placeholder={placeholder}
       />
-      <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none !overflow-visible truncate text-[11px] font-normal leading-tight text-gray-500 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-gray-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t  after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-gray-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-gray-gray-500">
-   Select a Date
-      </label>
+      
     </div>
   );
 });

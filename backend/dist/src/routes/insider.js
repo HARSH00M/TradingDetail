@@ -109,83 +109,88 @@ GROUP BY
 // ORDER BY 
 //     latest_acquisition_date DESC;
 // `
-const companywise = (from, to) => (0, config_1.default) `
-WITH LatestShareholding AS (
-    SELECT 
-        categoryOfPerson,
-        symbol, 
-        company,
-        acquisitionDateFrom,
-        shareholdingPrior,
-        shareholdingPost,
-        ROW_NUMBER() OVER (
-            PARTITION BY company 
-            ORDER BY ABS(acquisitionDateFrom - ${to}::date)
-        ) AS rn,
-        SUM(numOfSecurityAcquiredDisposed) OVER (PARTITION BY company) AS total_num_of_security_acquired_disposed,
-        SUM(valueOfSecurityAcquiredDisposed) OVER (PARTITION BY company) AS total_value_of_security_acquired_disposed,
-        MAX(shareholdingPrior) OVER (PARTITION BY company) AS latest_shareholdingPrior,
-        MAX(shareholdingPost) OVER (PARTITION BY company) AS latest_shareholdingPost
-    FROM 
-        transactions
-    WHERE 
-        categoryOfPerson IN ('Director', 'Promoters', 'Promoter Group') AND
-        modeofacquisition IN ('Market Sale', 'Off Market', 'Preferential Offer', 'Market Sale') AND
-        transactionType = 'Buy' 
-        AND acquisitionDateFrom BETWEEN ${from} AND ${to}
-)
-
-SELECT 
-    ts.categoryOfPerson,
-    ts.symbol,
-    ts.company,
-    TO_CHAR(ts.acquisitionDateFrom, 'DD-MM-YYYY') AS latest_acquisitiondatefrom,
-    ts.latest_shareholdingPrior,
-    ts.latest_shareholdingPost,
-    (ts.latest_shareholdingPost - ts.latest_shareholdingPrior) AS shareholding_difference,
-    ts.total_num_of_security_acquired_disposed,
-    ts.total_value_of_security_acquired_disposed,
-    sd.nseSymbol,
-    sd.bseCode,
-    sd.marketCapitalization,
-    sd.closePrice,
-    sd.industry,
-    sd.sector,
-    sd.priceToEarnings,
-    sd.priceToSales,
-    sd.revenueGrowthTtm,
-    sd.patGrowthTtm,
-    sd.patGrowthQoq,
-    sd.priceToBookValue,
-    sd.returns1W,
-    sd.returns1M,
-    sd.returns3M,
-    sd.returns6M,
-    sd.strengthVsNifty500Monthly,
-    sd.sma20D,
-    sd.evToEbitda,
-    sd.fixedAssets3YearsBack,
-    sd.fiftyTwoWhDistance,
-    sd.fiftyTwoWl,
-    sd.strengthVsNifty500Weekly,
-    sd.debtToEquity,
-    sd.debtToEquity3YearsBack,
-    sd.changeInDiiHoldings1Year,
-    sd.changeInFiiHoldings1Year,
-    sd.promoterHoldings,
-    sd.changeInPromoterHoldings1Year,
-    sd.roce,
-    sd.pbtGrowthTtm,
-    sd.fixedAssetsLatestYear
-FROM 
-    LatestShareholding ts
-LEFT JOIN 
-    stockdata sd ON ts.symbol = sd.nseSymbol
-WHERE 
-    ts.rn = 1
-ORDER BY 
-    ts.acquisitionDateFrom ASC;
-`;
+const companywise = (datefrom, dateto, fromamount, toamount) => {
+    return (0, config_1.default) `
+      WITH LatestShareholding AS (
+        SELECT 
+            categoryOfPerson,
+            symbol, 
+            company,
+            acquisitionDateFrom,
+            shareholdingPrior,
+            shareholdingPost,
+            ROW_NUMBER() OVER (
+                PARTITION BY company 
+                ORDER BY ABS(acquisitionDateFrom - ${dateto}::date)
+            ) AS rn,
+            SUM(numOfSecurityAcquiredDisposed) OVER (PARTITION BY company) AS total_num_of_security_acquired_disposed,
+            SUM(valueOfSecurityAcquiredDisposed) OVER (PARTITION BY company) AS total_value_of_security_acquired_disposed,
+            MAX(shareholdingPrior) OVER (PARTITION BY company) AS latest_shareholdingPrior,
+            MAX(shareholdingPost) OVER (PARTITION BY company) AS latest_shareholdingPost
+        FROM 
+            transactions
+        WHERE 
+            categoryOfPerson IN ('Director', 'Promoters', 'Promoter Group') AND
+            modeofacquisition IN ('Market Sale', 'Off Market', 'Preferential Offer', 'Market Sale') AND
+            transactionType = 'Buy' 
+            AND acquisitionDateFrom BETWEEN ${datefrom}::date AND ${dateto}::date
+      )
+      
+      SELECT 
+          ts.categoryOfPerson,
+          ts.symbol,
+          ts.company,
+          TO_CHAR(ts.acquisitionDateFrom, 'DD-MM-YYYY') AS latest_acquisitiondatefrom,
+          ts.latest_shareholdingPrior,
+          ts.latest_shareholdingPost,
+          (ts.latest_shareholdingPost - ts.latest_shareholdingPrior) AS shareholding_difference,
+          ts.total_num_of_security_acquired_disposed,
+          ts.total_value_of_security_acquired_disposed,
+          sd.nseSymbol,
+          sd.bseCode,
+          sd.marketCapitalization,
+          sd.closePrice,
+          sd.industry,
+          sd.sector,
+          sd.priceToEarnings,
+          sd.priceToSales,
+          sd.revenueGrowthTtm,
+          sd.patGrowthTtm,
+          sd.patGrowthQoq,
+          sd.priceToBookValue,
+          sd.returns1W,
+          sd.returns1M,
+          sd.returns3M,
+          sd.returns6M,
+          sd.strengthVsNifty500Monthly,
+          sd.sma20D,
+          sd.evToEbitda,
+          sd.fixedAssets3YearsBack,
+          sd.fiftyTwoWhDistance,
+          sd.fiftyTwoWl,
+          sd.strengthVsNifty500Weekly,
+          sd.debtToEquity,
+          sd.debtToEquity3YearsBack,
+          sd.changeInDiiHoldings1Year,
+          sd.changeInFiiHoldings1Year,
+          sd.promoterHoldings,
+          sd.changeInPromoterHoldings1Year,
+          sd.roce,
+          sd.pbtGrowthTtm,
+          sd.fixedAssetsLatestYear
+      FROM 
+          LatestShareholding ts
+      LEFT JOIN 
+          stockdata sd ON ts.symbol = sd.nseSymbol
+      WHERE 
+          ts.rn = 1
+          ${fromamount && toamount
+        ? (0, config_1.default) `AND ts.total_value_of_security_acquired_disposed BETWEEN ${fromamount}::numeric AND ${toamount}::numeric`
+        : (0, config_1.default) ``}
+      ORDER BY 
+          ts.acquisitionDateFrom ASC;
+    `;
+};
 const namecombined = (from, to) => (0, config_1.default) `WITH LatestHoldings AS (
     SELECT 
         acquirerdisposer,
@@ -285,7 +290,7 @@ router.post('/companywise', (req, res) => __awaiter(void 0, void 0, void 0, func
     }
     try {
         console.log(fromdate, todate);
-        const data = yield companywise(fromdate, todate);
+        const data = yield companywise(fromdate, todate, fromamount, toamount);
         res.json({
             between: [fromdate, todate],
             data: data

@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import Spinner from "../../spinner";
 import Table from './tables/Table'
 import toast from "react-hot-toast";
+import selected_date from "./components/selected_date";
 
 
 
@@ -103,13 +104,10 @@ export default function FilterBoard() {
     <div className="md:min-h-screen shadow-md shadow-black/30 flex flex-col items-center justify-center w-full">
 
       {/* <FilterSection apply={apply} reset={reset} filterstate={state} setState={setState} data={data}/> */}
-      <FilterSection apply={apply} reset={reset}  setState={setState} />
-      
-      <input type="number" ref={fromAmountRef}/>
-      <input type="number" ref={toAmountRef}/>
-
-      <div className="flex w-full justify-center text-lg font-bold text-gray-600">{tabledata?.between ? <div> from {tabledata.between[0]} to {tabledata.between[1]}</div> : null}</div>
+      <FilterSection apply={apply} reset={reset}  setState={setState} toamountref={toAmountRef} fromamountref={fromAmountRef} />
     
+
+     {tabledata?.between  ? selected_date(tabledata.between[0], tabledata.between[1]) : null}
 
      <div className="overflow-clip w-96 md:w-full md:overflow-x-auto md:min-w-screen  md:max-w-screen-lg">
      {tabledata?.data ? 

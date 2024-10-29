@@ -1,5 +1,6 @@
 import { useRef } from 'react';
-import DatePicker, { DatePickerRef } from './dateselector'; // Import DatePicker with DatePickerRef type
+import DatePicker, { DatePickerRef } from './date_selector'; // Import DatePicker with DatePickerRef type
+import AmountSelector from './amount_selector';
 
 // type DataProps = {
 //   modeofacquisition: string[];
@@ -26,10 +27,14 @@ export default function FilterSection({
   apply,
   reset,
   setState,
+  toamountref,
+  fromamountref 
 }: {
   apply: any;
   reset: any;
   setState: any;
+  toamountref : any;
+  fromamountref : any 
 }) {
   const fromDatePickerRef = useRef<DatePickerRef>(null); // Create refs for DatePickers
   const toDatePickerRef = useRef<DatePickerRef>(null);
@@ -51,10 +56,11 @@ export default function FilterSection({
       </div>
 
       <div className="flex justify-center md:justify-start items-center py-4 gap-y-2 gap-x-2 flex-wrap md:gap-x-4">
-        <DatePicker statename="fromdate" setState={setState} ref={fromDatePickerRef} />
-        <p>to</p>
-        <DatePicker statename="todate" setState={setState} ref={toDatePickerRef} />
-
+        <DatePicker placeholder='from date' statename="fromdate" setState={setState} ref={fromDatePickerRef} />
+        <DatePicker placeholder='to date' statename="todate" setState={setState} ref={toDatePickerRef} />
+        
+        <AmountSelector placeholder='from amount' ref={fromamountref}/>
+        <AmountSelector placeholder='to amount' ref={toamountref}/>
         <button
           onClick={resetAll}
           className="rounded-md bg-red-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:shadow-none active:bg-red-700 hover:bg-red-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2"
